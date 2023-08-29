@@ -20,6 +20,8 @@
         <module>macula-samples-gateway</module>
         <module>macula-samples-thirdparty</module>
         <module>macula-samples-basic</module>
+        <module>macula-samples-service1</module>
+        <module>macula-samples-api</module>
     </modules>
 
 </project>
