@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.macula.samples</groupId>
+    <artifactId>macula-samples</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
+    </properties>
+
+    <modules>
+        <module>macula-samples-parent</module>
+        <module>macula-samples-admin-bff</module>
+        <module>macula-samples-openapi</module>
+        <module>macula-samples-gateway</module>
+        <module>macula-samples-thirdparty</module>
+        <module>macula-samples-basic</module>
+    </modules>
+
+</project>
