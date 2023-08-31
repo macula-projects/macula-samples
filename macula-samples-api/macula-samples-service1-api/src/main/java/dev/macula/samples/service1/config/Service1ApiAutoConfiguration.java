@@ -15,22 +15,19 @@
  * limitations under the License.
  */
 
-package dev.macula.samples.service1.api;
+package dev.macula.samples.service1.config;
 
-import dev.macula.samples.service1.api.fallback.AbstractEchoFeignFallbackFactory;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * {@code EchoFeignClient} Echo服务的封装
+ * {@code Service1ApiAutoConfiguration} 自动加载FeignClient
  *
  * @author rain
- * @since 2023/8/29 11:40
+ * @since 2023/8/31 17:48
  */
-@FeignClient(value = "macula-samples-service1", contextId = "echoFeignClient",
-    fallbackFactory = AbstractEchoFeignFallbackFactory.class)
-public interface EchoFeignClient {
-    @GetMapping(name = "/api/v1/echo/hello")
-    String hello(@RequestParam("echo") String echo);
+@AutoConfiguration
+@EnableFeignClients(basePackages = "dev.macula.samples.service1.api")
+public class Service1ApiAutoConfiguration {
+
 }
