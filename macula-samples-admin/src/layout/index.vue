@@ -328,6 +328,8 @@ export default {
         if (item.children && item.children.length > 0) {
           item.children = this.filterUrl(item.children)
         }
+
+
         newMap.push(item)
       })
       return newMap;
