@@ -17,7 +17,7 @@
 
 package dev.macula.samples.service1.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import dev.macula.samples.service1.form.ApplicationForm;
 import dev.macula.samples.service1.query.ApplicationPageQuery;
 import dev.macula.samples.service1.service.ApplicationService;
@@ -33,7 +33,7 @@ import javax.validation.Valid;
 /**
  * 应用控制器
  */
-@Tag(name = "应用接口", description = "应用接口")
+@Tag(name = "应用管理", description = "应用管理")
 @RestController
 @RequestMapping("/api/v1/app")
 @RequiredArgsConstructor
@@ -42,24 +42,25 @@ public class ApplicationController {
     private final ApplicationService applicationService;
 
     @Operation(summary = "获取应用列表分页")
+    @Parameter(name = "查询参数")
     @GetMapping
-    public IPage<ApplicationVO> listApplications(ApplicationPageQuery queryParams) {
-        IPage<ApplicationVO> list = applicationService.listApplicationPages(queryParams);
-        return list;
+    public Page<ApplicationVO> listApplications(ApplicationPageQuery queryParams) {
+        return applicationService.listApplicationPages(queryParams);
     }
 
     @Operation(summary = "新增应用")
+    @Parameter(name = "应用表单数据")
     @PostMapping
     public boolean saveApplication(@Valid @RequestBody ApplicationForm formData) {
-        boolean result = applicationService.saveApplication(formData);
-        return result;
+        return applicationService.saveApplication(formData);
     }
 
     @Operation(summary = "修改应用")
+    @Parameter(name = "应用ID")
+    @Parameter(name = "应用表单数据")
     @PutMapping(value = "/{appId}")
     public boolean updateApplication(@PathVariable Long appId, @Valid @RequestBody ApplicationForm formData) {
-        boolean result = applicationService.updateApplication(appId, formData);
-        return result;
+        return applicationService.updateApplication(appId, formData);
     }
 
     @Operation(summary = "删除应用")
@@ -71,10 +72,10 @@ public class ApplicationController {
     }
 
     @Operation(summary = "添加维护人")
-    @Parameter(name = "userId，多个以英文逗号(,)分割")
+    @Parameter(name = "应用ID")
+    @Parameter(name = "应用表单数据")
     @PutMapping("/addMaintainer/{appId}")
     public boolean addMaintainer(@PathVariable Long appId, @RequestBody ApplicationForm formData) {
-        boolean result = applicationService.addMaintainer(appId, formData);
-        return result;
+        return applicationService.addMaintainer(appId, formData);
     }
 }

@@ -17,7 +17,7 @@
 
 package dev.macula.samples.service1.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import dev.macula.samples.service1.form.ApplicationForm;
 import dev.macula.samples.service1.pojo.entity.Application;
@@ -34,7 +34,7 @@ public interface ApplicationService extends IService<Application> {
      *
      * @return 应用列表
      */
-    IPage<ApplicationVO> listApplicationPages(ApplicationPageQuery queryParams);
+    Page<ApplicationVO> listApplicationPages(ApplicationPageQuery queryParams);
 
     /**
      * 新增应用
