@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="dev.macula.cloud.system.mapper.SysApplicationMapper">
+<mapper namespace="dev.macula.samples.service1.mapper.ApplicationMapper">
 
-    <select id="listApplicationPages" resultType="dev.macula.cloud.system.pojo.bo.ApplicationBO">
+    <select id="listApplicationPages" resultType="dev.macula.samples.service1.pojo.bo.ApplicationBO">
         SELECT
         id,
         application_name,

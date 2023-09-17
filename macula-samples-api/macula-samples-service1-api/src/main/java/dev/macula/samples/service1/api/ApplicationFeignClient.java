@@ -17,11 +17,22 @@
 
 package dev.macula.samples.service1.api;
 
+import dev.macula.boot.result.PageVO;
+import dev.macula.samples.service1.api.fallback.AbstracApplicationFeignFallbackFactory;
+import dev.macula.samples.service1.query.ApplicationPageQuery;
+import dev.macula.samples.service1.vo.app.ApplicationVO;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
 /**
  * {@code ApplicationFeignClient} is
  *
  * @author rain
  * @since 2023/9/11 17:38
  */
+@FeignClient(value = "macula-samples-service1", contextId = "applicationFeignClient",
+    fallbackFactory = AbstracApplicationFeignFallbackFactory.class)
 public interface ApplicationFeignClient {
+    @GetMapping("/api/v1/app")
+    PageVO<ApplicationVO> listApplications(ApplicationPageQuery queryParams);
 }

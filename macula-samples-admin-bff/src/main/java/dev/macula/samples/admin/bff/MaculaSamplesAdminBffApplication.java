@@ -30,7 +30,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"dev.macula.samples.admin.bff", "dev.macula.samples.service1"})
 public class MaculaSamplesAdminBffApplication {
     public static void main(String[] args) {
         SpringApplication.run(MaculaSamplesAdminBffApplication.class, args);

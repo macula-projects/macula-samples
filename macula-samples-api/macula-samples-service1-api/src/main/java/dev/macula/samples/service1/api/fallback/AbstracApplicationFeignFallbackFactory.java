@@ -15,19 +15,17 @@
  * limitations under the License.
  */
 
-package dev.macula.samples.service1.config;
+package dev.macula.samples.service1.api.fallback;
 
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.cloud.openfeign.EnableFeignClients;
+import dev.macula.samples.service1.api.EchoFeignClient;
+import org.springframework.cloud.openfeign.FallbackFactory;
 
 /**
- * {@code Service1ApiAutoConfiguration} 自动加载FeignClient
+ * {@code AbstracApplicationFeignFallbackFactory} Applicatoin服务远程调用降级工厂，具体实现需要调用方实现并注册为Spring Bean
  *
  * @author rain
- * @since 2023/8/31 17:48
+ * @since 2023/8/29 11:42
  */
-@AutoConfiguration
-@EnableFeignClients(basePackages = "dev.macula.samples.service1.api")
-public class Service1ApiAutoConfiguration {
+public abstract class AbstracApplicationFeignFallbackFactory implements FallbackFactory<EchoFeignClient> {
 
 }
