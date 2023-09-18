@@ -17,6 +17,8 @@
 
 package dev.macula.samples.admin.bff.service;
 
+import dev.macula.samples.service1.vo.app.ApplicationVO;
+
 /**
  * {@code EchoService} ECHO演示服务接口
  *
@@ -25,4 +27,6 @@ package dev.macula.samples.admin.bff.service;
  */
 public interface EchoService {
     String hello(String echo);
+
+    ApplicationVO app(ApplicationVO vo);
 }

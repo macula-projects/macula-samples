@@ -19,6 +19,7 @@ package dev.macula.samples.admin.bff.service.impl;
 
 import dev.macula.samples.admin.bff.service.EchoService;
 import dev.macula.samples.service1.api.EchoFeignClient;
+import dev.macula.samples.service1.vo.app.ApplicationVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -37,5 +38,10 @@ public class EchoServiceImpl implements EchoService {
     public String hello(String echo) {
         echo = echo + "xxx";
         return echoFeignClient.hello(echo);
+    }
+
+    @Override
+    public ApplicationVO app(ApplicationVO vo) {
+        return echoFeignClient.app(vo);
     }
 }

@@ -18,13 +18,12 @@
 package dev.macula.samples.service1.controller;
 
 import dev.macula.boot.exception.BizException;
+import dev.macula.samples.service1.errors.Service1ErrorCodes;
+import dev.macula.samples.service1.vo.app.ApplicationVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * {@code EchoController} ECHO服务
@@ -40,7 +39,17 @@ public class EchoController {
     @Parameter(name = "echo字符串")
     @GetMapping(value = "/hello")
     public String hello(@RequestParam("echo") String echo) {
-        throw new BizException("CTEST", "TEST", "XXX");
-        //return "Hello World, " + echo;
+        return "Hello World, " + echo;
+    }
+
+    @Operation(summary = "POST演示")
+    @Parameter(name = "应用VO")
+    @PostMapping(value = "/app")
+    public ApplicationVO helloApp(@RequestBody ApplicationVO vo) {
+        vo.setHomepage("http://xxx/test:8080/api");
+        if (vo.getCreateTime() == null) {
+            throw new BizException(Service1ErrorCodes.BIZ_APP_ERROR, "test");
+        }
+        return vo;
     }
 }

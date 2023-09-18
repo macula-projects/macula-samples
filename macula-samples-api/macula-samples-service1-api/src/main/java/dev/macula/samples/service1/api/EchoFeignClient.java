@@ -18,8 +18,11 @@
 package dev.macula.samples.service1.api;
 
 import dev.macula.samples.service1.api.fallback.AbstractEchoFeignFallbackFactory;
+import dev.macula.samples.service1.vo.app.ApplicationVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -33,4 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface EchoFeignClient {
     @GetMapping("/api/v1/echo/hello")
     String hello(@RequestParam("echo") String echo);
+
+    @PostMapping("/api/v1/echo/app")
+    ApplicationVO app(@RequestBody ApplicationVO vo);
 }
