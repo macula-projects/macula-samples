@@ -31,10 +31,7 @@ spring:
 macula:
   security:
     ignore-urls:
-      - /api/token
-      - /api/token/**
-      - /swagger-ui/index.html
-      - /v3/api-docs/swagger-config
+      - /api/v1/echo/**
 
 mybatis-plus:
   type-handlers-package: dev.macula.boot.starter.mp.handler

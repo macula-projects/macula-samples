@@ -17,6 +17,7 @@
 
 package dev.macula.samples.service1.controller;
 
+import dev.macula.boot.exception.BizException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,6 +40,7 @@ public class EchoController {
     @Parameter(name = "echo字符串")
     @GetMapping(value = "/hello")
     public String hello(@RequestParam("echo") String echo) {
-        return "Hello World, " + echo;
+        throw new BizException("CTEST", "TEST", "XXX");
+        //return "Hello World, " + echo;
     }
 }

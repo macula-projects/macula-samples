@@ -31,6 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "macula-samples-service1", contextId = "echoFeignClient",
     fallbackFactory = AbstractEchoFeignFallbackFactory.class)
 public interface EchoFeignClient {
-    @GetMapping(name = "/api/v1/echo/hello")
+    @GetMapping("/api/v1/echo/hello")
     String hello(@RequestParam("echo") String echo);
 }
