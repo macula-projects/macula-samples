@@ -50,9 +50,7 @@
   </template>
   
   <script>
-  import { useTenantStore } from '@/stores/tenant';
-  import { mapActions } from 'pinia';
-  
+    
   export default {
     data() {
       return {
@@ -88,7 +86,6 @@
   
     },
     methods: {
-      ...mapActions(useTenantStore, ['pushTenantOptions', 'updateTenantLabel', 'updateTenantId', 'clearTenantOptions']),
       async login() {
   
         var validate = await this.$refs.loginForm.validate().catch(() => { })
