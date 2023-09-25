@@ -115,7 +115,7 @@
         }
   
         var userInfo = await this.$API.common_auth.getUserInfo.get()
-        if (userInfo.code && userInfo.code === '00000') {
+        if (userInfo.success) {
           this.$TOOL.data.set("USER_INFO", userInfo.data)
         } else {
           this.islogin = false
@@ -126,7 +126,7 @@
         // 处理菜单
         // 用户的角色是否包含路由返回菜单对应的角色
         var res = await this.$API.common_auth.getRoutes.get()
-        if (res.code && res.code === '00000') {
+        if (res.success) {
           var routes = res.data
           var roles = userInfo.data.roles
           var perms = userInfo.data.perms
