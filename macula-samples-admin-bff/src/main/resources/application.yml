@@ -19,7 +19,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://127.0.0.1:9000/oauth2/jwks    # 网关地址
+          jwk-set-uri: http://127.0.0.1:8080/oauth2/jwks    # 网关地址
 feign:
   httpclient:
     enabled: false
