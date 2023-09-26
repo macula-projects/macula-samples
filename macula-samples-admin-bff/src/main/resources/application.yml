@@ -11,6 +11,8 @@ spring:
         server-addr: ${nacos.config.server-addr}
         namespace: ${nacos.config.namespace}
         # group:
+        metadata:
+          grayversion: v030937
     sentinel:
       enabled: false
   security:

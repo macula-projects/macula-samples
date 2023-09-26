@@ -25,7 +25,7 @@ spring:
         namespace: ${nacos.config.namespace}
         # group:
         metadata:
-          version: v1
+          grayversion: v030937
     sentinel:
       enabled: false
 macula:
