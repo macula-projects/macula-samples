@@ -96,7 +96,7 @@
           username: this.form.user,
           password: this.form.password,
           grant_type: 'password',
-          client_id: 'e4da4a32-592b-46f0-ae1d-784310e88423',
+          client_id: 'e2fa7e64-249b-46f0-ae1d-797610e88615',
           client_secret: 'secret',
           scope: 'message.read message.write userinfo'
         }

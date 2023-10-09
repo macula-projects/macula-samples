@@ -96,9 +96,9 @@ export default {
           this.isSaveing = true;
           if (this.mode == 'add') {
             // 调用相关接口
-            var res = await this.$API.system_application.application.add.post(this.form);
+            var res = await this.$API.service1_application.application.add.post(this.form);
           } else {
-            var res = await this.$API.system_application.application.edit.put(this.form, this.form.id);
+            var res = await this.$API.service1_application.application.edit.put(this.form, this.form.id);
           }
           this.isSaveing = false;
           if (res.success) {

@@ -59,7 +59,7 @@ public class ApplicationVO {
     private String accessPath;
 
     @Schema(description = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH24:mm:ss")
     private LocalDateTime createTime;
 
     @Schema(description = "是否回传属性")

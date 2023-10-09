@@ -19,13 +19,17 @@ package dev.macula.samples.service1.api;
 
 import dev.macula.boot.result.PageVO;
 import dev.macula.samples.service1.api.fallback.AbstracApplicationFeignFallbackFactory;
+import dev.macula.samples.service1.form.ApplicationForm;
 import dev.macula.samples.service1.query.ApplicationPageQuery;
 import dev.macula.samples.service1.vo.app.ApplicationVO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
- * {@code ApplicationFeignClient} is
+ * {@code ApplicationFeignClient} 应用远程接口
  *
  * @author rain
  * @since 2023/9/11 17:38
@@ -34,5 +38,17 @@ import org.springframework.web.bind.annotation.GetMapping;
     fallbackFactory = AbstracApplicationFeignFallbackFactory.class)
 public interface ApplicationFeignClient {
     @GetMapping("/api/v1/app")
-    PageVO<ApplicationVO> listApplications(ApplicationPageQuery queryParams);
+    PageVO<ApplicationVO> listApplications(@SpringQueryMap ApplicationPageQuery queryParams);
+
+    @PostMapping("/api/v1/app")
+    boolean saveApplication(@Valid @RequestBody ApplicationForm formData);
+
+    @PutMapping(value = "/api/v1/app/{appId}")
+    boolean updateApplication(@PathVariable Long appId, @Valid @RequestBody ApplicationForm formData);
+
+    @DeleteMapping("/api/v1/app/{ids}")
+    boolean deleteApplications(@PathVariable("ids") String ids);
+
+    @PutMapping("/api/v1/app/addMaintainer/{appId}")
+    boolean addMaintainer(@PathVariable Long appId, @RequestBody ApplicationForm formData);
 }
