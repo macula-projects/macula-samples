@@ -33,6 +33,7 @@
     <modules>
         <module>macula-samples-basic-api</module>
         <module>macula-samples-service1-api</module>
+        <module>macula-samples-service2-api</module>
     </modules>
 
 
