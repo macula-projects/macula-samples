@@ -17,9 +17,11 @@
 
 package dev.macula.samples.gateway;
 
+import dev.macula.boot.starter.cloud.gateway.security.JwtClaimsCustomizer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.Bean;
 
 /**
  * {@code MaculaSamplesGatewayApplication}  网关启动类
@@ -32,5 +34,13 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class MaculaSamplesGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(MaculaSamplesGatewayApplication.class, args);
+    }
+
+    @Bean
+    JwtClaimsCustomizer jwtClaimsCustomizer() {
+        return builder -> {
+            builder.claim("sal", "demo");
+            builder.claim("abc", "aaa");
+        };
     }
 }
