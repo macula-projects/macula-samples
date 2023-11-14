@@ -22,6 +22,7 @@
         <module>macula-samples-basic</module>
         <module>macula-samples-service1</module>
         <module>macula-samples-api</module>
+        <module>macula-samples-service2</module>
     </modules>
 
 </project>
