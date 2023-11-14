@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+/**
+ * {@code KmsFeignClient} kms远程接口
+ *
+ * @author qyh
+ * @since 2023/11/07 17:38
+ */
 @FeignClient(value = "macula-samples-service2", contextId = "kmsFeignClient",
         fallbackFactory = AbstracKmsFeignFallbackFactory.class)
 public interface KmsFeignClient {

@@ -1,14 +1,22 @@
 package dev.macula.samples.service2.utils;
 
-import java.io.IOException;
 import java.security.*;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * {@code RSAUtil} RSA非对称密钥对工具类
+ *
+ * @author qyh
+ * @since 2023/11/07 10:13
+ */
 public class RSAUtil {
 
-    //生成秘钥对密钥大小为2048位
+    /**
+     * 生成秘钥对密钥大小为2048位
+     * @return 用Map包装的RSA密钥对
+     */
     public static Map<String,String> getKeyPair() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -25,15 +33,13 @@ public class RSAUtil {
         }
     }
 
-    //字节数组转Base64编码
+    /**
+     * 字节数组转Base64编码
+     * @param bytes 字节数组
+     * @return Base64编码的字符
+     */
     public static String byte2Base64(byte[] bytes){
         Base64.Encoder encoder = Base64.getEncoder();
         return new String(encoder.encode(bytes));
-    }
-
-    //Base64编码转字节数组
-    public static byte[] base642Byte(String base64Key) throws IOException{
-        Base64.Decoder decoder = Base64.getDecoder();
-        return decoder.decode(base64Key);
     }
 }

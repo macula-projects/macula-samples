@@ -23,8 +23,8 @@ import org.springframework.cloud.openfeign.FallbackFactory;
 /**
  * {@code AbstracKmsFeignFallbackFactory} kms服务远程调用降级工厂，具体实现需要调用方实现并注册为Spring Bean
  *
- * @author rain
- * @since 2023/8/29 11:42
+ * @author qyh
+ * @since 2023/11/07 11:42
  */
 public abstract class AbstracKmsFeignFallbackFactory implements FallbackFactory<KmsFeignClient> {
 
