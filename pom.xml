@@ -6,7 +6,7 @@
     <parent>
         <groupId>dev.macula.boot</groupId>
         <artifactId>macula-boot-parent</artifactId>
-        <version>5.0.8-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <groupId>dev.macula.samples</groupId>
@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>5.0.8-SNAPSHOT</revision>
+        <revision>5.0.9-SNAPSHOT</revision>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.javadoc.skip>true</maven.javadoc.skip>
