@@ -16,6 +16,15 @@ spring:
     sentinel:
       enabled: false
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origin-patterns: "*"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+            max-age: 1800
+        add-to-simple-url-handler-mapping: true
       routes:
         - id: macula-samples-admin-bff
           uri: lb://macula-samples-admin-bff
