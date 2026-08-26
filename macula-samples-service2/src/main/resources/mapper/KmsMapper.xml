@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.macula.samples.service2.mapper.KmsMapper">
+
+    <select id="listKmsPages" resultType="dev.macula.samples.service2.pojo.bo.KmsBo">
+        SELECT
+        skt.id as id,
+        sat.id as app_id,
+        code as app_code,
+        sat.application_name as app_name,
+        key_name
+        FROM
+        kms skt
+        LEFT JOIN
+        application sat
+        ON skt.app_id = sat.id
+        <where>
+            <if test='queryParams.keywords !=null  and queryParams.keywords.trim() neq ""'>
+                AND (skt.key_name like concat('%',#{queryParams.keywords},'%')) OR
+                (sat.code like concat('%',#{queryParams.keywords},'%'))
+            </if>
+        </where>
+    </select>
+</mapper>

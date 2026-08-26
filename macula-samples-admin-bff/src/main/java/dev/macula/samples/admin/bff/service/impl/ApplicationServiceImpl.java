@@ -17,8 +17,10 @@
 
 package dev.macula.samples.admin.bff.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import dev.macula.boot.result.PageVO;
 import dev.macula.samples.admin.bff.service.ApplicationService;
+import dev.macula.samples.admin.bff.service.KmsService;
 import dev.macula.samples.service1.api.ApplicationFeignClient;
 import dev.macula.samples.service1.form.ApplicationForm;
 import dev.macula.samples.service1.query.ApplicationPageQuery;
@@ -36,6 +38,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationFeignClient applicationFeignClient;
+    private final KmsService kmsService;
 
     @Override
     public PageVO<ApplicationVO> listApplicationPages(ApplicationPageQuery queryParams) {
@@ -54,6 +57,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public boolean deleteApplications(String idsStr) {
+        Assert.isFalse(kmsService.existsApp(idsStr), "应用数据被绑定删除失败");
         return applicationFeignClient.deleteApplications(idsStr);
     }
 
