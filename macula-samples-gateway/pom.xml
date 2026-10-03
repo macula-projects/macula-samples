@@ -7,6 +7,7 @@
         <groupId>dev.macula.samples</groupId>
         <artifactId>macula-samples</artifactId>
         <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>macula-samples-gateway</artifactId>
