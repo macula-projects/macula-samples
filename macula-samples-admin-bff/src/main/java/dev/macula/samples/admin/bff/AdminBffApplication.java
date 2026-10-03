@@ -23,7 +23,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * {@code public class MaculaSamplesAdminBffApplication {} SpringBoot启动类
+ * {@code public class AdminBffApplication {} SpringBoot启动类
  *
  * @author rain
  * @since 2023/8/28 17:18
@@ -31,8 +31,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = {"dev.macula.samples.admin.bff", "dev.macula.samples.service1"})
-public class MaculaSamplesAdminBffApplication {
+public class AdminBffApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MaculaSamplesAdminBffApplication.class, args);
+        SpringApplication.run(AdminBffApplication.class, args);
     }
 }

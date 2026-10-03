@@ -26,24 +26,24 @@
 
 <template>
   <slot :open="open">
-    <el-button type="primary" plain @click="open">导入</el-button>
+    <el-button plain type="primary" @click="open">导入</el-button>
   </slot>
-  <el-dialog v-model="dialog" title="导入" :width="550" :close-on-click-modal="false" append-to-body destroy-on-close>
-    <el-progress v-if="loading" :text-inside="true" :stroke-width="20" :percentage="percentage"
+  <el-dialog v-model="dialog" :close-on-click-modal="false" :width="550" append-to-body destroy-on-close title="导入">
+    <el-progress v-if="loading" :percentage="percentage" :stroke-width="20" :text-inside="true"
                  style="margin-bottom: 15px;"/>
     <div v-loading="loading">
       <el-upload ref="uploader"
-                 drag
-                 :accept="accept"
-                 :maxSize="maxSize"
-                 :limit="1"
-                 :data="data"
-                 :show-file-list="false"
-                 :http-request="request"
                  :before-upload="before"
+                 :accept="accept"
+                 :limit="1"
+                 :maxSize="maxSize"
+                 :data="data"
+                 :on-error="error"
+                 :http-request="request"
+                 :show-file-list="false"
                  :on-progress="progress"
                  :on-success="success"
-                 :on-error="error"
+                 drag
       >
         <slot name="uploader">
           <el-icon class="el-icon--upload">
@@ -58,13 +58,13 @@
             <template v-if="tip">{{ tip }}</template>
             <template v-else>请上传小于或等于 {{ maxSize }}M 的 {{ accept }} 格式文件</template>
             <p v-if="templateUrl" style="margin-top: 7px;">
-              <el-link :href="templateUrl" target="_blank" type="primary" :underline="false">下载导入模板</el-link>
+              <el-link :href="templateUrl" :underline="false" target="_blank" type="primary">下载导入模板</el-link>
             </p>
           </div>
         </template>
       </el-upload>
-      <el-form v-if="$slots.form" inline label-width="100px" label-position="left" style="margin-top: 18px;">
-        <slot name="form" :formData="formData"></slot>
+      <el-form v-if="$slots.form" inline label-position="left" label-width="100px" style="margin-top: 18px;">
+        <slot :formData="formData" name="form"></slot>
       </el-form>
     </div>
   </el-dialog>

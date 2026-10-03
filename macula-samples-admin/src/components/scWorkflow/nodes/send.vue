@@ -33,10 +33,10 @@
       </div>
     </div>
     <add-node v-model="nodeConfig.childNode"></add-node>
-    <el-drawer title="抄送人设置" v-model="drawer" destroy-on-close append-to-body :size="500">
+    <el-drawer v-model="drawer" :size="500" append-to-body destroy-on-close title="抄送人设置">
       <template #header>
         <div class="node-wrap-drawer__title">
-          <label @click="editTitle" v-if="!isEditTitle">{{ form.nodeName }}
+          <label v-if="!isEditTitle" @click="editTitle">{{ form.nodeName }}
             <el-icon class="node-wrap-drawer__title-edit">
               <el-icon-edit/>
             </el-icon>
@@ -49,7 +49,7 @@
         <el-main style="padding:0 20px 20px 20px">
           <el-form label-position="top">
             <el-form-item label="选择要抄送的人员">
-              <el-button type="primary" icon="el-icon-plus" round @click="selectHandle(1, form.nodeUserList)">选择人员
+              <el-button icon="el-icon-plus" round type="primary" @click="selectHandle(1, form.nodeUserList)">选择人员
               </el-button>
               <div class="tags-list">
                 <el-tag v-for="(user, index) in form.nodeUserList" :key="user.id" closable @close="delUser(index)">

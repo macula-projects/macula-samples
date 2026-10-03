@@ -23,8 +23,7 @@
     <parent>
         <groupId>dev.macula.samples</groupId>
         <artifactId>macula-samples-api</artifactId>
-        <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>macula-samples-service1-api</artifactId>

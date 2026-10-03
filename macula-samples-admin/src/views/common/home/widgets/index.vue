@@ -16,31 +16,31 @@
   -->
 
 <template>
-  <div :class="['widgets-home', customizing?'customizing':'']" ref="main">
+  <div ref="main" :class="['widgets-home', customizing?'customizing':'']">
     <div class="widgets-content">
       <div class="widgets-top">
         <div class="widgets-top-title">
           控制台
         </div>
         <div class="widgets-top-actions">
-          <el-button v-if="customizing" type="primary" icon="el-icon-check" round @click="save">完成</el-button>
-          <el-button v-else type="primary" icon="el-icon-edit" round @click="custom">自定义</el-button>
+          <el-button v-if="customizing" icon="el-icon-check" round type="primary" @click="save">完成</el-button>
+          <el-button v-else icon="el-icon-edit" round type="primary" @click="custom">自定义</el-button>
         </div>
       </div>
-      <div class="widgets" ref="widgets">
+      <div ref="widgets" class="widgets">
         <div class="widgets-wrapper">
           <div v-if="nowCompsList.length<=0" class="no-widgets">
-            <el-empty image="img/no-widgets.svg" description="没有部件啦" :image-size="280"></el-empty>
+            <el-empty :image-size="280" description="没有部件啦" image="img/no-widgets.svg"></el-empty>
           </div>
           <el-row :gutter="15">
             <el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
-              <draggable v-model="grid.copmsList[index]" animation="200" handle=".customize-overlay" group="people"
-                         item-key="com" dragClass="aaaaa" force-fallback fallbackOnBody class="draggable-box">
+              <draggable v-model="grid.copmsList[index]" animation="200" class="draggable-box" dragClass="aaaaa"
+                         fallbackOnBody force-fallback group="people" handle=".customize-overlay" item-key="com">
                 <template #item="{ element }">
                   <div class="widgets-item">
                     <component :is="allComps[element]"></component>
                     <div v-if="customizing" class="customize-overlay">
-                      <el-button class="close" type="danger" plain icon="el-icon-close" size="small"
+                      <el-button class="close" icon="el-icon-close" plain size="small" type="danger"
                                  @click="remove(element)"></el-button>
                       <label>
                         <el-icon>
@@ -73,7 +73,7 @@
         </el-header>
         <el-header style="height:auto">
           <div class="selectLayout">
-            <div class="selectLayout-item item01" :class="{active:grid.layout.join(',')=='12,6,6'}"
+            <div :class="{active:grid.layout.join(',')=='12,6,6'}" class="selectLayout-item item01"
                  @click="setLayout([12,6,6])">
               <el-row :gutter="2">
                 <el-col :span="12"><span></span></el-col>
@@ -81,7 +81,7 @@
                 <el-col :span="6"><span></span></el-col>
               </el-row>
             </div>
-            <div class="selectLayout-item item02" :class="{active:grid.layout.join(',')=='24,16,8'}"
+            <div :class="{active:grid.layout.join(',')=='24,16,8'}" class="selectLayout-item item02"
                  @click="setLayout([24,16,8])">
               <el-row :gutter="2">
                 <el-col :span="24"><span></span></el-col>
@@ -89,7 +89,7 @@
                 <el-col :span="8"><span></span></el-col>
               </el-row>
             </div>
-            <div class="selectLayout-item item03" :class="{active:grid.layout.join(',')=='24'}"
+            <div :class="{active:grid.layout.join(',')=='24'}" class="selectLayout-item item03"
                  @click="setLayout([24])">
               <el-row :gutter="2">
                 <el-col :span="24"><span></span></el-col>
@@ -102,7 +102,7 @@
         <el-main class="nopadding">
           <div class="widgets-list">
             <div v-if="myCompsList.length<=0" class="widgets-list-nodata">
-              <el-empty description="没有部件啦" :image-size="60"></el-empty>
+              <el-empty :image-size="60" description="没有部件啦"></el-empty>
             </div>
             <div v-for="item in myCompsList" :key="item.title" class="widgets-list-item">
               <div class="item-logo">
@@ -115,7 +115,7 @@
                 <p>{{ item.description }}</p>
               </div>
               <div class="item-actions">
-                <el-button type="primary" icon="el-icon-plus" size="small" @click="push(item)"></el-button>
+                <el-button icon="el-icon-plus" size="small" type="primary" @click="push(item)"></el-button>
               </div>
             </div>
           </div>
@@ -238,7 +238,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .widgets-home {
   display: flex;
   flex-direction: row;

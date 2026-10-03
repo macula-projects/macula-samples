@@ -1,43 +1,82 @@
+server:
+  port: ${SERVER_PORT:6003}
+
 spring:
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/macula-samples?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true
-    username: root
-    password:
-  redis:
-    database: 0
-    host: 127.0.0.1
-    port: 6379
+  profiles:
+    active: @profile.active@
+    group:
+      docker: local
+  application:
+    name: macula-samples-service1
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yml?refreshEnabled=true
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.yml?refreshEnabled=true
   cache:
     # 缓存类型 redis、none(不使用缓存)
     type: redis
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://127.0.0.1:8080/oauth2/jwks
   cloud:
     nacos:
+      server-addr: ${spring.config.nacos.server-addr}
+      namespace: ${spring.config.nacos.namespace}
+      username: ${spring.config.nacos.username}
+      password: ${spring.config.nacos.password}
       discovery:
-        enabled: true
-        server-addr: ${nacos.config.server-addr}
-        namespace: ${nacos.config.namespace}
-        # group:
+        namespace: ${spring.cloud.nacos.namespace}
         metadata:
-          grayversion: v030937
-    sentinel:
-      enabled: false
+          version: v1
+  servlet:
+    encoding:
+      force: true
+
+mybatis-plus:
+  type-handlers-package: dev.macula.boot.starter.mp.handler
+  #configuration:
+  # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
 macula:
   security:
     ignore-urls:
       - /api/v1/echo/**
 
-mybatis-plus:
-  type-handlers-package: dev.macula.boot.starter.mp.handler
-    #configuration:
-  # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
-  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+---
+# local Profile 包含 IDE 本地开发所需的全部默认配置
+spring:
+  config:
+    activate:
+      on-profile: local
+    nacos:
+      server-addr: 127.0.0.1:${NACOS_SERVER_PORT:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:${MYSQL_PORT:23306}/macula-samples?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true
+    username: ${MYSQL_APP_USER:macula}
+    password: ${MYSQL_APP_PASSWORD:macula}
+  data:
+    redis:
+      database: 0
+      host: 127.0.0.1
+      port: ${REDIS_PORT:26379}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://127.0.0.1:6000/oauth2/jwks
+  cloud:
+    sentinel:
+      enabled: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 1
+    validate-on-migrate: true
+    clean-disabled: true
+    locations: classpath:db/migration
 
 feign:
   httpclient:
@@ -61,14 +100,116 @@ springdoc:
   swagger-ui:
     enabled: true # 默认是true，用于开关API UI
 
-server:
-  servlet:
-    encoding:
-      force: true
-
 logging:
   level:
     root: info
     dev.macula.samples: debug
   file:
     name: ${user.home}/logs/${spring.application.name}/${spring.application.name}.log
+  structured:
+    format:
+      console: logstash
+      file: logstash
+
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false
+        url: http://127.0.0.1:24318/v1/metrics
+  tracing:
+    sampling:
+      probability: 0.1
+    export:
+      otlp:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
+  opentelemetry:
+    resource-attributes:
+      service:
+        name: ${spring.application.name}
+        namespace: macula-samples
+      deployment:
+        environment:
+          name: local
+    tracing:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/logs
+
+---
+# Docker Profile 覆盖容器内 DNS 连接信息，其余沿用 local 默认配置
+spring:
+  config:
+    activate:
+      on-profile: docker
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:nacos:8848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+  datasource:
+    url: jdbc:mysql://mysql:3306/macula-samples?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&autoReconnect=true
+    username: ${MYSQL_APP_USER}
+    password: ${MYSQL_APP_PASSWORD}
+  data:
+    redis:
+      host: redis
+      port: 6379
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://macula-samples-gateway:6000/oauth2/jwks
+
+---
+# 共享环境只保留配置中心连接信息，其余配置由 Nacos Data ID 提供
+spring:
+  config:
+    activate:
+      on-profile: dev
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: pet
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}

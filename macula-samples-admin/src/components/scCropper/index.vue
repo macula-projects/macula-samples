@@ -28,11 +28,11 @@
 <template>
   <div class="sc-cropper">
     <div class="sc-cropper__img">
-      <img :src="src" ref="img">
+      <img ref="img" :src="src">
     </div>
     <div class="sc-cropper__preview">
       <h4>图像预览</h4>
-      <div class="sc-cropper__preview__img" ref="preview"></div>
+      <div ref="preview" class="sc-cropper__preview__img"></div>
     </div>
   </div>
 </template>

@@ -1,23 +1,50 @@
 server:
+  port: ${SERVER_PORT:6002}
+
+spring:
+  profiles:
+    active: @profile.active@
+    group:
+      docker: local
+  application:
+    name: macula-samples-openapi
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yml?refreshEnabled=true
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.yml?refreshEnabled=true
+  cloud:
+    nacos:
+      server-addr: ${spring.config.nacos.server-addr}
+      namespace: ${spring.config.nacos.namespace}
+      username: ${spring.config.nacos.username}
+      password: ${spring.config.nacos.password}
+      discovery:
+        namespace: ${spring.cloud.nacos.namespace}
+        metadata:
+          version: v1
   servlet:
     encoding:
       force: true
 
+---
+# local Profile 包含 IDE 本地开发所需的全部默认配置
 spring:
-  cloud:
+  config:
+    activate:
+      on-profile: local
     nacos:
-      discovery:
-        enabled: true
-        server-addr: ${nacos.config.server-addr}
-        namespace: ${nacos.config.namespace}
-        # group:
-    sentinel:
-      enabled: false
+      server-addr: 127.0.0.1:${NACOS_SERVER_PORT:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
   security:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://127.0.0.1:8080/oauth2/jwks    # 网关地址
+          jwk-set-uri: http://127.0.0.1:6000/oauth2/jwks
+  cloud:
+    sentinel:
+      enabled: false
 feign:
   httpclient:
     enabled: false
@@ -48,3 +75,102 @@ logging:
     com.alibaba.nacos.client: error
   file:
     name: ${user.home}/logs/${spring.application.name}/${spring.application.name}.log
+  structured:
+    format:
+      console: logstash
+      file: logstash
+
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false
+        url: http://127.0.0.1:24318/v1/metrics
+  tracing:
+    sampling:
+      probability: 0.1
+    export:
+      otlp:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
+  opentelemetry:
+    resource-attributes:
+      service:
+        name: ${spring.application.name}
+        namespace: macula-samples
+      deployment:
+        environment:
+          name: local
+    tracing:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/logs
+
+---
+# Docker Profile 覆盖容器内 DNS 连接信息，其余沿用 local 默认配置
+spring:
+  config:
+    activate:
+      on-profile: docker
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:nacos:8848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://macula-samples-gateway:6000/oauth2/jwks
+
+---
+# 共享环境只保留配置中心连接信息，其余配置由 Nacos Data ID 提供
+spring:
+  config:
+    activate:
+      on-profile: dev
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: pet
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}

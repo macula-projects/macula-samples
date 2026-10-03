@@ -19,12 +19,12 @@
   <div class="branch-wrap">
     <div class="branch-box-wrap">
       <div class="branch-box">
-        <el-button class="add-branch" type="success" plain round @click="addTerm">添加条件</el-button>
-        <div class="col-box" v-for="(item,index) in nodeConfig.conditionNodes" :key="index">
+        <el-button class="add-branch" plain round type="success" @click="addTerm">添加条件</el-button>
+        <div v-for="(item,index) in nodeConfig.conditionNodes" :key="index" class="col-box">
           <div class="condition-node">
             <div class="condition-node-box">
               <div class="auto-judge" @click="show(index)">
-                <div class="sort-left" v-if="index!=0" @click.stop="arrTransfer(index,-1)">
+                <div v-if="index!=0" class="sort-left" @click.stop="arrTransfer(index,-1)">
                   <el-icon>
                     <el-icon-arrow-left/>
                   </el-icon>
@@ -40,7 +40,7 @@
                   <span v-if="toText(nodeConfig, index)">{{ toText(nodeConfig, index) }}</span>
                   <span v-else class="placeholder">请设置条件</span>
                 </div>
-                <div class="sort-right" v-if="index!=nodeConfig.conditionNodes.length-1"
+                <div v-if="index!=nodeConfig.conditionNodes.length-1" class="sort-right"
                      @click.stop="arrTransfer(index)">
                   <el-icon>
                     <el-icon-arrow-right/>
@@ -51,18 +51,18 @@
             </div>
           </div>
           <slot v-if="item.childNode" :node="item"></slot>
-          <div class="top-left-cover-line" v-if="index==0"></div>
-          <div class="bottom-left-cover-line" v-if="index==0"></div>
-          <div class="top-right-cover-line" v-if="index==nodeConfig.conditionNodes.length-1"></div>
-          <div class="bottom-right-cover-line" v-if="index==nodeConfig.conditionNodes.length-1"></div>
+          <div v-if="index==0" class="top-left-cover-line"></div>
+          <div v-if="index==0" class="bottom-left-cover-line"></div>
+          <div v-if="index==nodeConfig.conditionNodes.length-1" class="top-right-cover-line"></div>
+          <div v-if="index==nodeConfig.conditionNodes.length-1" class="bottom-right-cover-line"></div>
         </div>
       </div>
       <add-node v-model="nodeConfig.childNode"></add-node>
     </div>
-    <el-drawer title="条件设置" v-model="drawer" destroy-on-close append-to-body :size="600">
+    <el-drawer v-model="drawer" :size="600" append-to-body destroy-on-close title="条件设置">
       <template #header>
         <div class="node-wrap-drawer__title">
-          <label @click="editTitle" v-if="!isEditTitle">{{ form.nodeName }}
+          <label v-if="!isEditTitle" @click="editTitle">{{ form.nodeName }}
             <el-icon class="node-wrap-drawer__title-edit">
               <el-icon-edit/>
             </el-icon>
@@ -83,17 +83,17 @@
             <el-divider></el-divider>
             <el-form-item>
               <el-table :data="form.conditionList">
-                <el-table-column prop="label" label="描述">
+                <el-table-column label="描述" prop="label">
                   <template #default="scope">
                     <el-input v-model="scope.row.label" placeholder="描述"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column prop="field" label="条件字段" width="130">
+                <el-table-column label="条件字段" prop="field" width="130">
                   <template #default="scope">
                     <el-input v-model="scope.row.field" placeholder="条件字段"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column prop="operator" label="运算符" width="130">
+                <el-table-column label="运算符" prop="operator" width="130">
                   <template #default="scope">
                     <el-select v-model="scope.row.operator" placeholder="Select">
                       <el-option label="等于" value="="></el-option>
@@ -107,20 +107,20 @@
                     </el-select>
                   </template>
                 </el-table-column>
-                <el-table-column prop="value" label="值" width="100">
+                <el-table-column label="值" prop="value" width="100">
                   <template #default="scope">
                     <el-input v-model="scope.row.value" placeholder="值"></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column prop="value" label="移除" width="55">
+                <el-table-column label="移除" prop="value" width="55">
                   <template #default="scope">
-                    <el-link type="danger" :underline="false" @click="deleteConditionList(scope.$index)">移除</el-link>
+                    <el-link :underline="false" type="danger" @click="deleteConditionList(scope.$index)">移除</el-link>
                   </template>
                 </el-table-column>
               </el-table>
             </el-form-item>
             <p>
-              <el-button type="primary" icon="el-icon-plus" round @click="addConditionList">增加条件</el-button>
+              <el-button icon="el-icon-plus" round type="primary" @click="addConditionList">增加条件</el-button>
             </p>
           </el-form>
         </el-main>

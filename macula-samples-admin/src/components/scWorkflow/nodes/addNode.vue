@@ -18,9 +18,9 @@
 <template>
   <div class="add-node-btn-box">
     <div class="add-node-btn">
-      <el-popover placement="right-start" :width="270" trigger="click" :hide-after="0" :show-after="0">
+      <el-popover :hide-after="0" :show-after="0" :width="270" placement="right-start" trigger="click">
         <template #reference>
-          <el-button type="primary" icon="el-icon-plus" circle></el-button>
+          <el-button circle icon="el-icon-plus" type="primary"></el-button>
         </template>
         <div class="add-node-popover-body">
           <ul>

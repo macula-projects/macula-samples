@@ -1,50 +1,57 @@
-<h2 align="center">Macula Samples Admin</h2>
+# macula-samples Admin
 
-<p align="center">
-	<strong>基于Vuejs 3.x和Element Plus的Macula示例控制台</strong>
-</p>
-
-<p align="center">
-    <a href="https://github.com/macula-projects/macula-samples/blob/main/LICENSE" target="_blank">
-        <img src="https://img.shields.io/github/license/macula-projects/macula-samples.svg" >
-    </a>
-    <a>
-         <img src="https://img.shields.io/npm/v/element-plus.svg" />
-    </a>
-    <a>
-        <img src="https://img.shields.io/badge/node-%20%3E%3D%2016-47c219" >
-    </a>
-	<a href="https://v3.vuejs.org/" target="_blank">
-		<img src="https://img.shields.io/badge/VueCLI-5-green" alt="VueCLI">
-	</a>
-	<a href="https://v3.vuejs.org/" target="_blank">
-		<img src="https://img.shields.io/badge/Vue.js-3.x-green" alt="Vue">
-	</a>
-</p>
+Vue 3/Vite 管理端。业务 API 经生成项目 Gateway，登录 token 由外部 Macula Cloud IAM 提供。
 
 
-## 介绍
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and
+disable
+Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-基于Vuejs 3.x和Element Plus的Macula Cloud控制台，本身基于[SCUI](https://gitee.com/lolicode/scui)改造，引入Vite和Pinia。
 
-注：
-> SCUI 是一个中后台前端解决方案，基于VUE3和elementPlus实现。 使用最新的前端技术栈，提供各类实用的组件方便在业务开发时的调用，并且持续性的提供丰富的业务模板帮助你快速搭建企业级中后台前端任务。
+See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## 安装说明
+
+Admin 根 `.env` 保存各 mode 共享的本地默认值，包括 `/api`、外部 IAM、已批准的 demo OAuth client 和示例账号；`.env.development`、`.env.docker`、`.env.dev` 等文件只覆盖对应 mode 的差异。项目根 `deploy/.env` 的优先级高于 Admin mode 文件，用于统一覆盖本地部署配置；`*_INTERNAL_URL` 只供 Java 应用容器访问。业务、用户和菜单请求统一使用 `/api`，由 Vite/Nginx 代理到生成项目 Gateway，再由 `/admin/**` 路由进入 Admin BFF；只有登录请求由浏览器直接访问外部 Macula Cloud IAM，因此仅 IAM 地址需要允许 Admin 来源的 CORS。容器启动时会先将运行时值编码为 Base64，再生成由浏览器按 UTF-8 解码的 `config.js`，避免引号、反斜杠、换行或非 ASCII 字符破坏脚本语法；修改 `deploy/.env` 后无需重新构建 Admin 镜像。不要提交 `deploy/.env`，也不要使用生产 secret。
+
+- IDE 模式执行 `npm run dev`：根 `.env` 提供 `/api`、外部 IAM 和 demo OAuth 默认值，`.env.development` 开启代理并把 `/api` 转发到本机 `http://127.0.0.1:6000`，因此可直接从 Admin 模块启动。Vite 还会主动加载 `../deploy/.env`，其中的同名值优先级更高。开发模式不使用 Docker 启动时生成的 `config.js`。
+- Docker 模式执行 `./deploy/scripts/compose.sh up-apps`：Nginx 把 `/api` 转发到 Compose 中的生成项目 Gateway，并在容器启动时把外部 IAM 与 OAuth 配置写入 `config.js`。
+
+
 ```sh
-# 克隆项目
-git clone https://github.com/macula-projects/macula-cloud-admin
+npm ci
+```
 
-# 进入项目目录
-cd macula-cloud-admin
 
-# 安装依赖
-npm i
-
-# 启动项目(开发模式)
+```sh
 npm run dev
 ```
 
-## License
+浏览器访问 `http://127.0.0.1:5800`。启动前应先在 IDE 中运行生成项目 Gateway，或确认 `VITE_APP_GATEWAY_PROXY_TARGET` 指向一个可访问的 Gateway。
 
-MMacula Cloud Admin is Open Source software released under the Apache 2.0 license.
+
+```sh
+npm run build
+```
+
+容器模式构建：
+
+```sh
+npm run build:docker
+docker build -t macula-samples-admin .
+```
+
+
+```sh
+npm run test:unit
+```
+
+
+```sh
+npm run build
+npm run test:e2e # or `npm run test:e2e:ci` for headless testing
+```
+
+
+```sh
+npm run lint
+```

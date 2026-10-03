@@ -16,8 +16,8 @@
   -->
 
 <template>
-  <el-card shadow="hover" header="实时收入" v-loading="loading">
-    <scEcharts ref="c1" height="300px" :option="option"></scEcharts>
+  <el-card v-loading="loading" header="实时收入" shadow="hover">
+    <scEcharts ref="c1" :option="option" height="300px"></scEcharts>
   </el-card>
 </template>
 

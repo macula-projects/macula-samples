@@ -26,19 +26,19 @@
 
 <template>
   <slot :open="open">
-    <el-button type="primary" plain @click="open">导出</el-button>
+    <el-button plain type="primary" @click="open">导出</el-button>
   </slot>
-  <el-drawer v-model="dialog" title="导出" :size="400" direction="rtl" append-to-body destroy-on-close>
+  <el-drawer v-model="dialog" :size="400" append-to-body destroy-on-close direction="rtl" title="导出">
     <el-main style="padding: 0 20px 20px 20px;">
       <div v-loading="downLoading" element-loading-text="正在处理中...">
         <div v-if="downLoading && progress"
              style="position: absolute;width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;z-index: 3000;">
-          <el-progress :text-inside="true" :stroke-width="20" :percentage="downLoadProgress"
+          <el-progress :percentage="downLoadProgress" :stroke-width="20" :text-inside="true"
                        style="width: 100%;margin-bottom: 120px;"/>
         </div>
         <el-tabs>
           <el-tab-pane label="常规" lazy>
-            <el-form label-width="100px" label-position="left" style="margin: 10px 0 20px 0;">
+            <el-form label-position="left" label-width="100px" style="margin: 10px 0 20px 0;">
               <el-form-item label="文件名">
                 <el-input v-model="formData.fileName" placeholder="请输入文件名"/>
               </el-form-item>
@@ -47,19 +47,19 @@
                   <el-option v-for="item in fileTypes" :key="item" :label="'*.'+item" :value="item"/>
                 </el-select>
               </el-form-item>
-              <slot name="form" :formData="formData"></slot>
+              <slot :formData="formData" name="form"></slot>
             </el-form>
-            <el-button v-if="async" type="primary" size="large" icon="el-icon-plus" style="width: 100%;"
-                       @click="download" :loading="asyncLoading">发起导出任务
+            <el-button v-if="async" :loading="asyncLoading" icon="el-icon-plus" size="large" style="width: 100%;"
+                       type="primary" @click="download">发起导出任务
             </el-button>
-            <el-button v-else type="primary" size="large" icon="el-icon-download" style="width: 100%;"
+            <el-button v-else icon="el-icon-download" size="large" style="width: 100%;" type="primary"
                        @click="download">下 载
             </el-button>
           </el-tab-pane>
-          <el-tab-pane label="列设置" v-if="columnData.length>0" lazy>
+          <el-tab-pane v-if="columnData.length>0" label="列设置" lazy>
             <columnSet :column="columnData"></columnSet>
           </el-tab-pane>
-          <el-tab-pane label="其他参数" v-if="data && showData" lazy>
+          <el-tab-pane v-if="data && showData" label="其他参数" lazy>
             <el-descriptions :column="1" border size="small">
               <el-descriptions-item v-for=" (val, key) in data" :key="key" :label="key">{{ val }}</el-descriptions-item>
             </el-descriptions>

@@ -1,0 +1,243 @@
+name: ${COMPOSE_PROJECT_NAME:-macula-samples-dev}
+
+x-app-environment: &app-environment
+  SPRING_PROFILES_ACTIVE: docker
+  JAVA_OPTS: ${JAVA_OPTS:--XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom}
+  NACOS_SERVER_ADDR: nacos:8848
+  NACOS_NAMESPACE: ${NACOS_NAMESPACE:-MACULA5}
+  NACOS_USERNAME: ${NACOS_USERNAME:-nacos}
+  NACOS_PASSWORD: ${NACOS_PASSWORD:-nacos}
+  MYSQL_APP_USER: ${MYSQL_APP_USER:-macula}
+  MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:-macula}
+
+x-java-app: &java-app
+  profiles: [apps]
+  restart: unless-stopped
+  extra_hosts:
+    - host.docker.internal:host-gateway
+  healthcheck:
+    test: [CMD-SHELL, "bash -c 'exec 3<>/dev/tcp/127.0.0.1/$$SERVER_PORT'"]
+    interval: 10s
+    timeout: 5s
+    retries: 30
+    start_period: 40s
+
+services:
+  mysql:
+    image: ${MYSQL_IMAGE:-mysql:8.4.6}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-macula-root}
+      TZ: Asia/Shanghai
+    command: [--character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci]
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${MYSQL_PORT:-23306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: [CMD-SHELL, "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+    restart: unless-stopped
+
+  mysql-init:
+    image: ${MYSQL_IMAGE:-mysql:8.4.6}
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-macula-root}
+      MYSQL_APP_USER: ${MYSQL_APP_USER:-macula}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:-macula}
+      MYSQL_APP_DATABASE: macula-samples
+    entrypoint: [/bin/sh, /init/init.sh]
+    volumes:
+      - ./init/mysql:/init:ro
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: "no"
+
+  redis:
+    image: ${REDIS_IMAGE:-redis:7.4.5-alpine}
+    command: [redis-server, --appendonly, "yes"]
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${REDIS_PORT:-26379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [CMD, redis-cli, ping]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  nacos:
+    image: ${NACOS_IMAGE:-nacos/nacos-server:v3.2.4}
+    environment:
+      MODE: standalone
+      PREFER_HOST_MODE: hostname
+      SPRING_DATASOURCE_PLATFORM: mysql
+      MYSQL_SERVICE_HOST: mysql
+      MYSQL_SERVICE_PORT: "3306"
+      MYSQL_SERVICE_DB_NAME: nacos
+      MYSQL_SERVICE_USER: ${MYSQL_APP_USER:-macula}
+      MYSQL_SERVICE_PASSWORD: ${MYSQL_APP_PASSWORD:-macula}
+      MYSQL_SERVICE_DB_PARAM: characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      NACOS_AUTH_ENABLE: "false"
+      NACOS_AUTH_ADMIN_ENABLE: "false"
+      NACOS_AUTH_CONSOLE_ENABLE: "false"
+      NACOS_AUTH_TOKEN: ${NACOS_AUTH_TOKEN:-VGhpc0lzTG9jYWxEZXZlbG9wbWVudFRva2VuS2V5MDEyMzQ1Njc4OQ==}
+      NACOS_AUTH_IDENTITY_KEY: ${NACOS_AUTH_IDENTITY_KEY:-macula-local-key}
+      NACOS_AUTH_IDENTITY_VALUE: ${NACOS_AUTH_IDENTITY_VALUE:-macula-local-value}
+      JVM_XMS: 256m
+      JVM_XMX: 512m
+      JVM_XMN: 128m
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${NACOS_SERVER_PORT:-28848}:8848"
+      - "${BIND_ADDRESS:-127.0.0.1}:${NACOS_CONSOLE_PORT:-28080}:8080"
+      - "${BIND_ADDRESS:-127.0.0.1}:${NACOS_GRPC_PORT:-29848}:9848"
+    volumes:
+      - nacos-logs:/home/nacos/logs
+    healthcheck:
+      test: [CMD-SHELL, "bash -c 'exec 3<>/dev/tcp/127.0.0.1/8848'"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+    depends_on:
+      mysql-init:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  nacos-init:
+    image: curlimages/curl:8.12.1
+    environment:
+      NACOS_BASE_URL: http://nacos:8080
+      NACOS_NAMESPACE: ${NACOS_NAMESPACE:-MACULA5}
+    entrypoint: [/bin/sh, /init/init.sh]
+    volumes:
+      - ./init/nacos:/init:ro
+    depends_on:
+      nacos:
+        condition: service_healthy
+    restart: "no"
+
+  macula-samples-service1:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-service1/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-service1:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6003"
+    depends_on:
+      mysql-init: {condition: service_completed_successfully}
+      redis: {condition: service_healthy}
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-basic:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-basic/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-basic:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6004"
+    depends_on:
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-openapi:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-openapi/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-openapi:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6002"
+    depends_on:
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-thirdparty:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-thirdparty/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-thirdparty:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6005"
+    depends_on:
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-admin-bff:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-admin-bff/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-admin-bff:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6001"
+      MACULA_CLOUD_GATEWAY_INTERNAL_URL: ${MACULA_CLOUD_GATEWAY_INTERNAL_URL:-http://host.docker.internal:9000}
+      MACULA_CLOUD_APP_KEY: ${MACULA_CLOUD_APP_KEY:-macula-samples-admin-bff}
+      MACULA_CLOUD_APP_SECRET: ${MACULA_CLOUD_APP_SECRET:-example}
+    depends_on:
+      macula-samples-service1: {condition: service_healthy}
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-gateway:
+    <<: *java-app
+    build:
+      context: ..
+      dockerfile: macula-samples-gateway/Dockerfile
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-gateway:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      <<: *app-environment
+      SERVER_PORT: "6000"
+      OAUTH2_INTROSPECTION_URI: ${MACULA_CLOUD_IAM_INTERNAL_URL:-http://host.docker.internal:9010}/oauth2/introspect
+      MACULA_CLOUD_REDIS_HOST: ${MACULA_CLOUD_REDIS_HOST:-host.docker.internal}
+      MACULA_CLOUD_REDIS_PORT: ${MACULA_CLOUD_REDIS_PORT:-16379}
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${GATEWAY_HOST_PORT:-6000}:6000"
+    depends_on:
+      macula-samples-admin-bff: {condition: service_healthy}
+      redis: {condition: service_healthy}
+      nacos-init: {condition: service_completed_successfully}
+
+  macula-samples-admin:
+    profiles: [apps]
+    build:
+      context: ../macula-samples-admin
+      dockerfile: Dockerfile
+      args:
+        VITE_MODE: docker
+        VITE_APP_API_BASEURL: /api
+    image: ${IMAGE_REGISTRY:-local}/macula-samples-admin:${IMAGE_TAG:-1.0.0-SNAPSHOT}
+    environment:
+      MACULA_CLOUD_IAM_URL: ${MACULA_CLOUD_IAM_URL:-http://127.0.0.1:9010}
+      VITE_APP_OAUTH_CLIENT_ID: ${VITE_APP_OAUTH_CLIENT_ID:-e4da4a32-592b-46f0-ae1d-784310e88423}
+      VITE_APP_OAUTH_CLIENT_SECRET: ${VITE_APP_OAUTH_CLIENT_SECRET:-secret}
+      VITE_APP_OAUTH_SCOPE: ${VITE_APP_OAUTH_SCOPE:-message.read message.write userinfo}
+      VITE_APP_DEMO_USERNAME: ${VITE_APP_DEMO_USERNAME:-admin}
+      VITE_APP_DEMO_PASSWORD: ${VITE_APP_DEMO_PASSWORD:-admin}
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${ADMIN_HOST_PORT:-5800}:8080"
+    healthcheck:
+      test: [CMD-SHELL, "wget -q -O - http://127.0.0.1:8080/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    depends_on:
+      macula-samples-gateway: {condition: service_healthy}
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+  redis-data:
+  nacos-logs:

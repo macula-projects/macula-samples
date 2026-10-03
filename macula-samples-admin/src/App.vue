@@ -16,7 +16,7 @@
   -->
 
 <template>
-  <el-config-provider :locale="locale" :size="config.size" :zIndex="config.zIndex" :button="config.button">
+  <el-config-provider :button="config.button" :locale="locale" :size="config.size" :zIndex="config.zIndex">
     <router-view></router-view>
   </el-config-provider>
 </template>

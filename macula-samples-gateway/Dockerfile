@@ -1,13 +1,26 @@
-FROM konajdk/konajdk:8
-ARG JAR_FILE=target/*.jar
+# syntax=docker/dockerfile:1.7
+ARG MAVEN_IMAGE=maven:3.9.11-eclipse-temurin-17
+ARG RUNTIME_IMAGE=eclipse-temurin:17-jre-jammy
+ARG APP_PORT=6000
 
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV workdir /app
-WORKDIR ${workdir}
+FROM ${MAVEN_IMAGE} AS build
+WORKDIR /workspace
+COPY . .
+RUN --mount=type=cache,target=/root/.m2,sharing=locked \
+    mvn -B -ntp -Plocal -pl macula-samples-gateway -am clean package -DskipTests \
+    && jar_files=$(find macula-samples-gateway/target -maxdepth 1 -type f -name '*.jar' \
+         ! -name '*-sources.jar' ! -name '*-javadoc.jar' ! -name '*.original') \
+    && test "$(printf '%s\n' "$jar_files" | sed '/^$/d' | wc -l)" -eq 1 \
+    && cp "$jar_files" /tmp/application.jar
 
-ENV jar app.jar
-
-COPY ${JAR_FILE} ${workdir}/app.jar
-CMD ["sh", "-ec", "exec java -XX:+PrintGCDateStamps -XX:+PrintGCDetails -verbose:gc -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=8 -XX:GCLogFileSize=50M ${JAVA_OPTS} -Xshare:off -jar ${jar}"]
+FROM ${RUNTIME_IMAGE} AS runtime
+ARG APP_PORT
+RUN groupadd --system --gid 10001 macula \
+    && useradd --system --uid 10001 --gid macula --home-dir /opt/macula --create-home macula
+WORKDIR /opt/macula
+COPY --from=build --chown=macula:macula /tmp/application.jar application.jar
+USER 10001:10001
+ENV SERVER_PORT=${APP_PORT} \
+    JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -Djava.security.egd=file:/dev/./urandom"
+EXPOSE ${APP_PORT}
+ENTRYPOINT ["sh", "-c", "exec java ${JAVA_OPTS} -jar /opt/macula/application.jar"]

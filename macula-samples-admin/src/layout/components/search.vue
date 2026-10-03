@@ -17,15 +17,15 @@
 
 <template>
   <div class="sc-search">
-    <el-input ref="input" v-model="input" placeholder="搜索" size="large" clearable prefix-icon="el-icon-search"
-              :trigger-on-focus="false" @input="inputChange"/>
-    <div class="sc-search-history" v-if="history.length>0">
-      <el-tag closable effect="dark" type="info" v-for="(item, index) in history" :key="item"
-              @click="historyClick(item)" @close="historyClose(index)">{{item}}
+    <el-input ref="input" v-model="input" :trigger-on-focus="false" clearable placeholder="搜索" prefix-icon="el-icon-search"
+              size="large" @input="inputChange"/>
+    <div v-if="history.length>0" class="sc-search-history">
+      <el-tag v-for="(item, index) in history" :key="item" closable effect="dark" type="info"
+              @click="historyClick(item)" @close="historyClose(index)">{{ item }}
       </el-tag>
     </div>
     <div class="sc-search-result">
-      <div class="sc-search-no-result" v-if="result.length<=0">暂无搜索结果</div>
+      <div v-if="result.length<=0" class="sc-search-no-result">暂无搜索结果</div>
       <ul v-else>
         <el-scrollbar max-height="366px">
           <li v-for="item in result" :key="item.path" @click="to(item)">

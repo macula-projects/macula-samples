@@ -41,29 +41,29 @@
       </li>
     </ul>
 
-    <el-drawer title="添加应用" v-model="modsDrawer" :size="570" destroy-on-close>
+    <el-drawer v-model="modsDrawer" :size="570" destroy-on-close title="添加应用">
       <div class="setMods">
-        <h4>我的常用 ( {{myMods.length}} )</h4>
-        <draggable tag="ul" v-model="myMods" animation="200" item-key="path" group="people">
+        <h4>我的常用 ( {{ myMods.length }} )</h4>
+        <draggable v-model="myMods" animation="200" group="people" item-key="path" tag="ul">
           <template #item="{ element }">
             <li :style="{background:element.meta.color||'#909399'}">
               <el-icon>
                 <component :is="element.meta.icon||el-icon-menu"/>
               </el-icon>
-              <p>{{element.meta.title}}</p>
+              <p>{{ element.meta.title }}</p>
             </li>
           </template>
         </draggable>
       </div>
       <div class="setMods">
-        <h4>全部应用 ( {{filterMods.length}} )</h4>
-        <draggable tag="ul" v-model="filterMods" animation="200" item-key="path" :sort="false" group="people">
+        <h4>全部应用 ( {{ filterMods.length }} )</h4>
+        <draggable v-model="filterMods" :sort="false" animation="200" group="people" item-key="path" tag="ul">
           <template #item="{ element }">
             <li :style="{background:element.meta.color||'#909399'}">
               <el-icon>
                 <component :is="element.meta.icon||el-icon-menu"/>
               </el-icon>
-              <p>{{element.meta.title}}</p>
+              <p>{{ element.meta.title }}</p>
             </li>
           </template>
         </draggable>

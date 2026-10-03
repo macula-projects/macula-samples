@@ -25,7 +25,7 @@
 -->
 
 <template>
-  <div class="sc-code-editor" :style="{'height':_height}">
+  <div :style="{'height':_height}" class="sc-code-editor">
     <textarea ref="textarea" v-model="contentValue"></textarea>
   </div>
 </template>

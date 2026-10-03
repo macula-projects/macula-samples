@@ -31,7 +31,7 @@
   </div>
 
   <transition name="el-zoom-in-top">
-    <ul v-if="contextMenuVisible" :style="{left:left+'px',top:top+'px'}" class="contextmenu" id="contextmenu">
+    <ul v-if="contextMenuVisible" id="contextmenu" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
       <li @click="refreshTab()">
         <el-icon>
           <el-icon-refresh/>
@@ -39,7 +39,7 @@
         刷新
       </li>
       <hr>
-      <li @click="closeTabs()" :class="contextMenuItem.meta.affix?'disabled':''">
+      <li :class="contextMenuItem.meta.affix?'disabled':''" @click="closeTabs()">
         <el-icon>
           <el-icon-close/>
         </el-icon>

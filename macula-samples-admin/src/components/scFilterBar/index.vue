@@ -27,12 +27,12 @@
 <template>
   <div class="sc-filterBar">
     <slot :filterLength="filterObjLength" :openFilter="openFilter">
-      <el-badge :value="filterObjLength" type="danger" :hidden="filterObjLength<=0">
+      <el-badge :hidden="filterObjLength<=0" :value="filterObjLength" type="danger">
         <el-button icon="el-icon-filter" @click="openFilter"></el-button>
       </el-badge>
     </slot>
 
-    <el-drawer title="过滤器" v-model="drawer" :size="650" append-to-body>
+    <el-drawer v-model="drawer" :size="650" append-to-body title="过滤器">
       <el-container v-loading="saveLoading">
         <el-main style="padding:0">
           <el-tabs class="root">
@@ -70,17 +70,17 @@
                         </el-select>
                       </td>
                       <td>
-                        <el-input v-if="!item.field.type" v-model="item.value" placeholder="请选择过滤字段"
-                                  disabled></el-input>
+                        <el-input v-if="!item.field.type" v-model="item.value" disabled
+                                  placeholder="请选择过滤字段"></el-input>
                         <!-- 输入框 -->
                         <el-input v-if="item.field.type=='text'" v-model="item.value"
                                   :placeholder="item.field.placeholder||'请输入'"></el-input>
                         <!-- 下拉框 -->
                         <el-select v-if="item.field.type=='select'" v-model="item.value"
-                                   :placeholder="item.field.placeholder||'请选择'" filterable
-                                   :multiple="item.field.extend.multiple" :loading="item.selectLoading"
-                                   @visible-change="visibleChange($event, item)" :remote="item.field.extend.remote"
-                                   :remote-method="(query)=>{remoteMethod(query, item)}">
+                                   :loading="item.selectLoading" :multiple="item.field.extend.multiple"
+                                   :placeholder="item.field.placeholder||'请选择'" :remote="item.field.extend.remote"
+                                   :remote-method="(query)=>{remoteMethod(query, item)}" filterable
+                                   @visible-change="visibleChange($event, item)">
                           <el-option v-for="field in item.field.extend.data" :key="field.value" :label="field.label"
                                      :value="field.value"></el-option>
                         </el-select>
@@ -127,7 +127,7 @@
                       </td>
                     </tr>
                   </table>
-                  <el-button type="primary" text icon="el-icon-plus" @click="addFilter">增加过滤项</el-button>
+                  <el-button icon="el-icon-plus" text type="primary" @click="addFilter">增加过滤项</el-button>
                 </div>
               </el-scrollbar>
             </el-tab-pane>
@@ -142,8 +142,8 @@
           </el-tabs>
         </el-main>
         <el-footer>
-          <el-button type="primary" @click="ok" :disabled="filter.length<=0">立即过滤</el-button>
-          <el-button type="primary" plain @click="saveMy" :disabled="filter.length<=0">另存为常用</el-button>
+          <el-button :disabled="filter.length<=0" type="primary" @click="ok">立即过滤</el-button>
+          <el-button :disabled="filter.length<=0" plain type="primary" @click="saveMy">另存为常用</el-button>
           <el-button @click="clear">清空过滤</el-button>
         </el-footer>
       </el-container>

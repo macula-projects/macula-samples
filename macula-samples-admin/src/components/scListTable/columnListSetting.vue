@@ -1,5 +1,5 @@
 <template>
-  <div v-if="usercolumn.length>0" class="setting-column" v-loading="isSave">
+  <div v-if="usercolumn.length>0" v-loading="isSave" class="setting-column">
     <div class="setting-column__title">
       <span class="move_b"></span>
       <span class="show_b">显示</span>
@@ -8,7 +8,7 @@
       <span class="sortable_b">排序</span>
       <span class="fixed_b">固定</span>
     </div>
-    <div class="setting-column__list" ref="list">
+    <div ref="list" class="setting-column__list">
       <ul>
         <li v-for="item in usercolumn" :key="item.prop">
 					<span class="move_b">
@@ -17,7 +17,7 @@
           <span class="show_b">
 						<el-switch v-model="item.hide" :active-value="false" :inactive-value="true"></el-switch>
 					</span>
-          <span class="name_b" :title="item.prop">{{ item.label }}</span>
+          <span :title="item.prop" class="name_b">{{ item.label }}</span>
           <span class="width_b">
 						<el-input v-model="item.width" placeholder="auto" size="small"></el-input>
 					</span>
@@ -31,11 +31,11 @@
       </ul>
     </div>
     <div class="setting-column__bottom">
-      <el-button @click="backDefaul" :disabled="isSave">重置</el-button>
-      <el-button @click="save" type="primary">保存</el-button>
+      <el-button :disabled="isSave" @click="backDefaul">重置</el-button>
+      <el-button type="primary" @click="save">保存</el-button>
     </div>
   </div>
-  <el-empty v-else description="暂无可配置的列" :image-size="80"></el-empty>
+  <el-empty v-else :image-size="80" description="暂无可配置的列"></el-empty>
 </template>
 
 <script>

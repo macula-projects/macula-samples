@@ -26,10 +26,10 @@
 
 <template>
   <hr v-if="divided">
-  <li :class="disabled?'disabled':''" @click.stop="liClick" @mouseenter="openSubmenu($event)"
-      @mouseleave="closeSubmenu($event)">
+  <li :class="disabled?'disabled':''" @mouseenter="openSubmenu($event)" @mouseleave="closeSubmenu($event)"
+      @click.stop="liClick">
 		<span class="title">
-			<el-icon class="sc-contextmenu__icon"><component v-if="icon" :is="icon"/></el-icon>
+			<el-icon class="sc-contextmenu__icon"><component :is="icon" v-if="icon"/></el-icon>
 			{{ title }}
 		</span>
     <span class="sc-contextmenu__suffix">

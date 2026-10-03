@@ -26,15 +26,15 @@
 
 <template>
   <div class="sc-icon-select">
-    <div class="sc-icon-select__wrapper" :class="{'hasValue':value}" @click="open">
-      <el-input :prefix-icon="value||'el-icon-plus'" v-model="value" :disabled="disabled" readonly></el-input>
+    <div :class="{'hasValue':value}" class="sc-icon-select__wrapper" @click="open">
+      <el-input v-model="value" :disabled="disabled" :prefix-icon="value||'el-icon-plus'" readonly></el-input>
     </div>
-    <el-dialog title="图标选择器" v-model="dialogVisible" :width="760" destroy-on-close append-to-body>
+    <el-dialog v-model="dialogVisible" :width="760" append-to-body destroy-on-close title="图标选择器">
       <div class="sc-icon-select__dialog" style="margin: -20px 0 -10px 0;">
         <el-form :rules="{}">
           <el-form-item prop="searchText">
-            <el-input class="sc-icon-select__search-input" prefix-icon="el-icon-search" v-model="searchText"
-                      placeholder="搜索" size="large" clearable/>
+            <el-input v-model="searchText" class="sc-icon-select__search-input" clearable
+                      placeholder="搜索" prefix-icon="el-icon-search" size="large"/>
           </el-form-item>
         </el-form>
         <el-tabs>
@@ -60,7 +60,7 @@
         </el-tabs>
       </div>
       <template #footer>
-        <el-button @click="clear" text>清除</el-button>
+        <el-button text @click="clear">清除</el-button>
         <el-button @click="dialogVisible=false">取消</el-button>
       </template>
     </el-dialog>

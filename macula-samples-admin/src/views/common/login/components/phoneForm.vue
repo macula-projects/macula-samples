@@ -18,26 +18,26 @@
 <template>
   <el-form ref="loginForm" :model="form" :rules="rules" label-width="0" size="large">
     <el-form-item prop="phone">
-      <el-input v-model="form.phone" prefix-icon="el-icon-iphone" clearable
-                :placeholder="$t('login.mobilePlaceholder')">
+      <el-input v-model="form.phone" :placeholder="$t('login.mobilePlaceholder')" clearable
+                prefix-icon="el-icon-iphone">
         <template #prepend>+86</template>
       </el-input>
     </el-form-item>
     <el-form-item prop="yzm" style="margin-bottom: 35px;">
       <div class="login-msg-yzm">
-        <el-input v-model="form.yzm" prefix-icon="el-icon-unlock" clearable
-                  :placeholder="$t('login.smsPlaceholder')"></el-input>
-        <el-button @click="getYzm" :disabled="disabled">{{this.$t('login.smsGet')}}<span
-            v-if="disabled"> ({{time}})</span></el-button>
+        <el-input v-model="form.yzm" :placeholder="$t('login.smsPlaceholder')" clearable
+                  prefix-icon="el-icon-unlock"></el-input>
+        <el-button :disabled="disabled" @click="getYzm">{{ this.$t('login.smsGet') }}<span
+            v-if="disabled"> ({{ time }})</span></el-button>
       </div>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" style="width: 100%;" :loading="islogin" round @click="login">{{ $t('login.signIn') }}
+      <el-button :loading="islogin" round style="width: 100%;" type="primary" @click="login">{{ $t('login.signIn') }}
       </el-button>
     </el-form-item>
     <div class="login-reg">
-      {{$t('login.noAccount')}}
-      <router-link to="/user_register">{{$t('login.createAccount')}}</router-link>
+      {{ $t('login.noAccount') }}
+      <router-link to="/user_register">{{ $t('login.createAccount') }}</router-link>
     </div>
   </el-form>
 </template>

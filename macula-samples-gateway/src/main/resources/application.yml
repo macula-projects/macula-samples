@@ -1,58 +1,180 @@
+server:
+  port: ${SERVER_PORT:6000}
+
 spring:
-  redis: # 网关自己的redis配置
-    database: 0
-    host: 127.0.0.1
-    port: 6379
-    system: # macula-cloud的system模块的redis配置
-      database: 0
-      host: 127.0.0.1
-      port: 6379
+  profiles:
+    active: @profile.active@
+    group:
+      docker: local
+  application:
+    name: macula-samples-gateway
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yml?refreshEnabled=true
+      - optional:nacos:${spring.application.name}-${spring.profiles.active}.yml?refreshEnabled=true
   cloud:
     nacos:
+      server-addr: ${spring.config.nacos.server-addr}
+      namespace: ${spring.config.nacos.namespace}
+      username: ${spring.config.nacos.username}
+      password: ${spring.config.nacos.password}
       discovery:
-        server-addr: ${nacos.config.server-addr}
-        namespace: ${nacos.config.namespace}
-        # group:
-    sentinel:
-      enabled: false
+        namespace: ${spring.cloud.nacos.namespace}
     gateway:
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origin-patterns: "*"
-            allowed-methods: "*"
-            allowed-headers: "*"
-            allow-credentials: true
-            max-age: 1800
-        add-to-simple-url-handler-mapping: true
-      routes:
-        - id: macula-samples-admin-bff
-          uri: lb://macula-samples-admin-bff
-          predicates:
-            - Path=/admin/**
-          filters:
-            - StripPrefix=1
-        - id: macula-samples-openapi
-          uri: lb://macula-samples-openapi
-          predicates:
-            - Path=/openapi/**
-          filters:
-            - StripPrefix=1
+      server:
+        webflux:
+          routes:
+            - id: macula-samples-admin-bff
+              uri: lb://macula-samples-admin-bff
+              predicates:
+                - Path=/admin/**
+              filters:
+                - StripPrefix=1
+            - id: macula-samples-openapi
+              uri: lb://macula-samples-openapi
+              predicates:
+                - Path=/openapi/**
+              filters:
+                - StripPrefix=1
+macula:
+  gateway:
+    security:
+      only-auth-urls: /api/**
 
+---
+# local Profile 包含 IDE 本地开发所需的全部默认配置
+spring:
+  config:
+    activate:
+      on-profile: local
+    nacos:
+      server-addr: 127.0.0.1:${NACOS_SERVER_PORT:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
   security:
     oauth2:
       resourceserver:
         opaquetoken:
           client-id: e4da4a32-592b-46f0-ae1d-784310e88423
           client-secret: secret
-          introspection-uri: http://127.0.0.1:9010/oauth2/introspect
-macula:
-  gateway:
-    security:
-      only-auth-urls: /api/**
+          introspection-uri: ${OAUTH2_INTROSPECTION_URI:http://127.0.0.1:9010/oauth2/introspect}
+  redis: # 网关自己的redis配置
+    database: 0
+    host: ${REDIS_HOST:127.0.0.1}
+    port: ${REDIS_PORT:26379}
+    system: # macula-cloud的system模块的redis配置
+      database: 0
+      host: ${MACULA_CLOUD_REDIS_HOST:127.0.0.1}
+      port: ${MACULA_CLOUD_REDIS_PORT:16379}
+  cloud:
+    sentinel:
+      enabled: false
+  reactor:
+    context-propagation: auto
 
 logging:
   level:
     root: info
   file:
     name: ${user.home}/logs/${spring.application.name}/${spring.application.name}.log
+  structured:
+    format:
+      console: logstash
+      file: logstash
+
+management:
+  otlp:
+    metrics:
+      export:
+        enabled: false
+        url: http://127.0.0.1:24318/v1/metrics
+  tracing:
+    sampling:
+      probability: 0.1
+    export:
+      otlp:
+        enabled: false
+  logging:
+    export:
+      otlp:
+        enabled: false
+  opentelemetry:
+    resource-attributes:
+      service:
+        name: ${spring.application.name}
+        namespace: macula-samples
+      deployment:
+        environment:
+          name: local
+    tracing:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/traces
+    logging:
+      export:
+        otlp:
+          endpoint: http://127.0.0.1:24318/v1/logs
+
+---
+# Docker Profile 覆盖容器内 DNS 连接信息，其余沿用 local 默认配置
+spring:
+  config:
+    activate:
+      on-profile: docker
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:nacos:8848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+  redis:
+    host: ${REDIS_HOST:redis}
+    port: 6379
+    system:
+      host: ${MACULA_CLOUD_REDIS_HOST:host.docker.internal}
+      port: ${MACULA_CLOUD_REDIS_PORT:16379}
+
+---
+# 共享环境只保留配置中心连接信息，其余配置由 Nacos Data ID 提供
+spring:
+  config:
+    activate:
+      on-profile: dev
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: stg
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: pet
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prd
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:28848}
+      namespace: ${NACOS_NAMESPACE:MACULA5}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}

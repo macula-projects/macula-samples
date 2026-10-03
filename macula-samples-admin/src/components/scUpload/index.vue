@@ -16,41 +16,41 @@
   -->
 
 <template>
-  <div class="sc-upload" :class="{'sc-upload-round':round}" :style="style">
+  <div :class="{'sc-upload-round':round}" :style="style" class="sc-upload">
     <div v-if="file && file.status != 'success'" class="sc-upload__uploading">
       <div class="sc-upload__progress">
-        <el-progress :percentage="file.percentage" :text-inside="true" :stroke-width="16"/>
+        <el-progress :percentage="file.percentage" :stroke-width="16" :text-inside="true"/>
       </div>
-      <el-image class="image" :src="file.tempFile" fit="cover"></el-image>
+      <el-image :src="file.tempFile" class="image" fit="cover"></el-image>
     </div>
     <div v-if="file && file.status=='success'" class="sc-upload__img">
-      <el-image class="image" :src="file.url" :preview-src-list="[file.url]" fit="cover" hide-on-click-modal
-                append-to-body :z-index="9999">
+      <el-image :preview-src-list="[file.url]" :src="file.url" :z-index="9999" append-to-body class="image"
+                fit="cover" hide-on-click-modal>
         <template #placeholder>
           <div class="sc-upload__img-slot">
             Loading...
           </div>
         </template>
       </el-image>
-      <div class="sc-upload__img-actions" v-if="!disabled">
+      <div v-if="!disabled" class="sc-upload__img-actions">
         <span class="del" @click="handleRemove()"><el-icon><el-icon-delete/></el-icon></span>
       </div>
     </div>
-    <el-upload v-if="!file" class="uploader" ref="uploader"
+    <el-upload v-if="!file" ref="uploader" :accept="accept"
                :auto-upload="cropper?false:autoUpload"
                :disabled="disabled"
-               :show-file-list="showFileList"
                :action="action"
+               :before-upload="before"
                :name="name"
                :data="data"
-               :accept="accept"
-               :limit="1"
                :http-request="request"
-               :on-change="change"
-               :before-upload="before"
-               :on-success="success"
+               :limit="1"
                :on-error="error"
-               :on-exceed="handleExceed">
+               :on-change="change"
+               :on-exceed="handleExceed"
+               :on-success="success"
+               :show-file-list="showFileList"
+               class="uploader">
       <slot>
         <div class="el-upload--picture-card">
           <div class="file-empty">
@@ -63,10 +63,10 @@
       </slot>
     </el-upload>
     <span style="display:none!important"><el-input v-model="value"></el-input></span>
-    <el-dialog title="剪裁" draggable v-model="cropperDialogVisible" :width="580" @closed="cropperClosed"
-               destroy-on-close>
-      <sc-cropper :src="cropperFile.tempCropperFile" :compress="compress" :aspectRatio="aspectRatio"
-                  ref="cropper"></sc-cropper>
+    <el-dialog v-model="cropperDialogVisible" :width="580" destroy-on-close draggable title="剪裁"
+               @closed="cropperClosed">
+      <sc-cropper ref="cropper" :aspectRatio="aspectRatio" :compress="compress"
+                  :src="cropperFile.tempCropperFile"></sc-cropper>
       <template #footer>
         <el-button @click="cropperDialogVisible=false">取 消</el-button>
         <el-button type="primary" @click="cropperSave">确 定</el-button>

@@ -16,11 +16,11 @@
   -->
 
 <template>
-  <el-card shadow="hover" header="关于项目" class="item-background">
+  <el-card class="item-background" header="关于项目" shadow="hover">
     <p>高性能 / 精致 / 优雅。基于Vue3 + Element-Plus 的中后台前端解决方案，如果喜欢就点个星星支持一下。</p>
     <p>
       <a href='https://gitee.com/lolicode/scui' target="_blank">
-        <img src='https://gitee.com/lolicode/scui/badge/star.svg?theme=dark' alt='star' style="vertical-align: middle">
+        <img alt='star' src='https://gitee.com/lolicode/scui/badge/star.svg?theme=dark' style="vertical-align: middle">
       </a>
     </p>
   </el-card>

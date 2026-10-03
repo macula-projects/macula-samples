@@ -18,25 +18,25 @@
 <template>
   <div class="sc-upload-file">
     <el-upload
-        :disabled="disabled"
-        :auto-upload="autoUpload"
+        v-model:file-list="defaultFileList"
+        :accept="accept"
         :action="action"
-        :name="name"
+        :auto-upload="autoUpload"
         :data="data"
         :http-request="request"
-        v-model:file-list="defaultFileList"
-        :show-file-list="showFileList"
-        :drag="drag"
-        :accept="accept"
-        :multiple="multiple"
-        :limit="limit"
         :before-upload="before"
+        :disabled="disabled"
+        :drag="drag"
+        :multiple="multiple"
+        :name="name"
+        :limit="limit"
+        :on-exceed="handleExceed"
         :on-success="success"
         :on-error="error"
         :on-preview="handlePreview"
-        :on-exceed="handleExceed">
+        :show-file-list="showFileList">
       <slot>
-        <el-button type="primary" :disabled="disabled">Click to upload</el-button>
+        <el-button :disabled="disabled" type="primary">Click to upload</el-button>
       </slot>
       <template #tip>
         <div v-if="tip" class="el-upload__tip">{{ tip }}</div>

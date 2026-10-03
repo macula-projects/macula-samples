@@ -18,7 +18,7 @@
 package dev.macula.samples.service1.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.spring.service.IService;
 import dev.macula.samples.service1.form.ApplicationForm;
 import dev.macula.samples.service1.pojo.entity.Application;
 import dev.macula.samples.service1.query.ApplicationPageQuery;

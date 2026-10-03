@@ -16,22 +16,22 @@
   -->
 
 <template>
-  <div ref="" class="mobile-nav-button" @click="showMobileNav($event)" v-drag draggable="false">
+  <div ref="" v-drag class="mobile-nav-button" draggable="false" @click="showMobileNav($event)">
     <el-icon>
       <el-icon-menu/>
     </el-icon>
   </div>
 
-  <el-drawer ref="mobileNavBox" title="移动端菜单" :size="240" v-model="nav" direction="ltr" :with-header="false"
-             destroy-on-close>
+  <el-drawer ref="mobileNavBox" v-model="nav" :size="240" :with-header="false" destroy-on-close direction="ltr"
+             title="移动端菜单">
     <el-container class="mobile-nav">
       <el-header>
         <div class="logo-bar"><img class="logo" src="/img/logo.png"><span>{{ $CONFIG.APP_NAME }}</span></div>
       </el-header>
       <el-main>
         <el-scrollbar>
-          <el-menu :default-active="$route.meta.active || $route.fullPath" @select="select" router
-                   background-color="#212d3d" text-color="#fff" active-text-color="#409EFF">
+          <el-menu :default-active="$route.meta.active || $route.fullPath" active-text-color="#409EFF" background-color="#212d3d"
+                   router text-color="#fff" @select="select">
             <NavMenu :navMenus="menu"></NavMenu>
           </el-menu>
         </el-scrollbar>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import NavMenu from './NavMenu.vue';
+import NavMenu from './navMenu.vue';
 
 export default {
   components: {

@@ -27,11 +27,11 @@
 <template>
   <el-skeleton v-if="renderLoading || Object.keys(form).length==0" animated/>
 
-  <el-form v-else ref="form" :model="form" :label-width="config.labelWidth" :label-position="config.labelPosition"
-           v-loading="loading" element-loading-text="Loading...">
+  <el-form v-else ref="form" v-loading="loading" :label-position="config.labelPosition" :label-width="config.labelWidth"
+           :model="form" element-loading-text="Loading...">
     <el-row :gutter="15">
       <template v-for="(item, index) in config.formItems" :key="index">
-        <el-col :span="item.span || 24" v-if="!hideHandle(item)">
+        <el-col v-if="!hideHandle(item)" :span="item.span || 24">
           <sc-title v-if="item.component=='title'" :title="item.label"></sc-title>
           <el-form-item v-else :prop="item.name" :rules="rulesHandle(item)">
             <template #label>
@@ -44,18 +44,18 @@
             </template>
             <!-- input -->
             <template v-if="item.component=='input'">
-              <el-input v-model="form[item.name]" :placeholder="item.options.placeholder" clearable
-                        :maxlength="item.options.maxlength" show-word-limit></el-input>
+              <el-input v-model="form[item.name]" :maxlength="item.options.maxlength" :placeholder="item.options.placeholder"
+                        clearable show-word-limit></el-input>
             </template>
             <!-- checkbox -->
             <template v-else-if="item.component=='checkbox'">
               <template v-if="item.name">
-                <el-checkbox v-model="form[item.name][_item.name]" :label="_item.label"
-                             v-for="(_item, _index) in item.options.items" :key="_index"></el-checkbox>
+                <el-checkbox v-for="(_item, _index) in item.options.items" :key="_index"
+                             v-model="form[item.name][_item.name]" :label="_item.label"></el-checkbox>
               </template>
               <template v-else>
-                <el-checkbox v-model="form[_item.name]" :label="_item.label"
-                             v-for="(_item, _index) in item.options.items" :key="_index"></el-checkbox>
+                <el-checkbox v-for="(_item, _index) in item.options.items" :key="_index"
+                             v-model="form[_item.name]" :label="_item.label"></el-checkbox>
               </template>
             </template>
             <!-- checkboxGroup -->
@@ -92,9 +92,9 @@
             </template>
             <!-- date -->
             <template v-else-if="item.component=='date'">
-              <el-date-picker v-model="form[item.name]" :type="item.options.type" :shortcuts="item.options.shortcuts"
-                              :default-time="item.options.defaultTime" :value-format="item.options.valueFormat"
-                              :placeholder="item.options.placeholder || '请选择'"></el-date-picker>
+              <el-date-picker v-model="form[item.name]" :default-time="item.options.defaultTime" :placeholder="item.options.placeholder || '请选择'"
+                              :shortcuts="item.options.shortcuts" :type="item.options.type"
+                              :value-format="item.options.valueFormat"></el-date-picker>
             </template>
             <!-- number -->
             <template v-else-if="item.component=='number'">
@@ -114,7 +114,7 @@
             </template>
             <!-- rate -->
             <template v-else-if="item.component=='rate'">
-              <el-rate style="margin-top: 6px;" v-model="form[item.name]"></el-rate>
+              <el-rate v-model="form[item.name]" style="margin-top: 6px;"></el-rate>
             </template>
             <!-- slider -->
             <template v-else-if="item.component=='slider'">
@@ -126,7 +126,7 @@
             </template>
             <!-- editor -->
             <template v-else-if="item.component=='editor'">
-              <sc-editor v-model="form[item.name]" placeholder="请输入" :height="400"></sc-editor>
+              <sc-editor v-model="form[item.name]" :height="400" placeholder="请输入"></sc-editor>
             </template>
             <!-- noComponent -->
             <template v-else>

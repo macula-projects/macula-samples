@@ -25,7 +25,7 @@
         <p style="font-size: 14px;color: #999;line-height: 1.5;margin: 0 40px;">
           在处理耗时过久的任务时为了不阻碍正在处理的工作，可在任务中心进行异步执行。</p>
       </el-empty>
-      <el-card v-for="task in tasks" :key="task.id" shadow="hover" class="user-bar-tasks-item">
+      <el-card v-for="task in tasks" :key="task.id" class="user-bar-tasks-item" shadow="hover">
         <div class="user-bar-tasks-item-body">
           <div class="taskIcon">
             <el-icon v-if="task.type=='export'" :size="20">
@@ -42,11 +42,11 @@
             </div>
             <div class="bottom">
               <div class="state">
-                <el-tag type="info" v-if="task.state=='0'">执行中</el-tag>
+                <el-tag v-if="task.state=='0'" type="info">执行中</el-tag>
                 <el-tag v-if="task.state=='1'">完成</el-tag>
               </div>
               <div class="handler">
-                <el-button v-if="task.state=='1'" type="primary" circle icon="el-icon-download"
+                <el-button v-if="task.state=='1'" circle icon="el-icon-download" type="primary"
                            @click="download(task)"></el-button>
               </div>
             </div>

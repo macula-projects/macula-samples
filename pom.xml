@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>dev.macula.boot</groupId>
-        <artifactId>macula-boot-parent</artifactId>
-        <version>6.1.0-SNAPSHOT</version>
-    </parent>
 
     <groupId>dev.macula.samples</groupId>
     <artifactId>macula-samples</artifactId>
@@ -15,15 +10,11 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>6.1.0-SNAPSHOT</revision>
-        <maven.install.skip>true</maven.install.skip>
-        <maven.deploy.skip>true</maven.deploy.skip>
-        <maven.javadoc.skip>true</maven.javadoc.skip>
-        <maven.source.skip>true</maven.source.skip>
-        <skipNexusStagingDeployMojo>true</skipNexusStagingDeployMojo>
+        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <modules>
+        <module>macula-samples-parent</module>
         <module>macula-samples-admin-bff</module>
         <module>macula-samples-openapi</module>
         <module>macula-samples-gateway</module>
@@ -33,76 +24,4 @@
         <module>macula-samples-api</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>local</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <profile.active>local</profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <profile.active>dev</profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>stg</id>
-            <properties>
-                <profile.active>stg</profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>pet</id>
-            <properties>
-                <profile.active>pet</profile.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>prd</id>
-            <properties>
-                <profile.active>prd</profile.active>
-            </properties>
-        </profile>
-    </profiles>
-
-    <repositories>
-        <repository>
-            <name>Central Portal Snapshots</name>
-            <id>central-portal-snapshots</id>
-            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 </project>

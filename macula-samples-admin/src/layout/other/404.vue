@@ -23,9 +23,9 @@
     <div class="router-err__content">
       <h2>无权限或找不到页面</h2>
       <p>当前页面无权限访问或者打开了一个不存在的链接，请检查当前账户权限和链接的可访问性。</p>
-      <el-button type="primary" plain round @click="gohome">返回首页</el-button>
-      <el-button type="primary" plain round @click="gologin">重新登录</el-button>
-      <el-button type="primary" round @click="goback">返回上一页</el-button>
+      <el-button plain round type="primary" @click="gohome">返回首页</el-button>
+      <el-button plain round type="primary" @click="gologin">重新登录</el-button>
+      <el-button round type="primary" @click="goback">返回上一页</el-button>
     </div>
   </div>
 </template>

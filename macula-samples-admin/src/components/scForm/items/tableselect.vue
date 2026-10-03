@@ -16,10 +16,10 @@
   -->
 
 <template>
-  <sc-table-select v-model="value" :apiObj="apiObj" :table-width="600" :multiple="item.options.multiple"
-                   :props="item.options.props" style="width: 100%;">
-    <el-table-column v-for="(_item, _index) in item.options.column" :key="_index" :prop="_item.prop"
-                     :label="_item.label" :width="_item.width"></el-table-column>
+  <sc-table-select v-model="value" :apiObj="apiObj" :multiple="item.options.multiple" :props="item.options.props"
+                   :table-width="600" style="width: 100%;">
+    <el-table-column v-for="(_item, _index) in item.options.column" :key="_index" :label="_item.label"
+                     :prop="_item.prop" :width="_item.width"></el-table-column>
   </sc-table-select>
 </template>
 

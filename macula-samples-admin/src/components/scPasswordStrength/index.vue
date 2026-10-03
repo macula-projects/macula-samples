@@ -26,7 +26,7 @@
 
 <template>
   <div class="sc-password-strength">
-    <div class="sc-password-strength-bar" :class="`sc-password-strength-level-${level}`"></div>
+    <div :class="`sc-password-strength-level-${level}`" class="sc-password-strength-bar"></div>
   </div>
 </template>
 

@@ -30,12 +30,12 @@
       暂无数据
     </div>
     <div v-for="item in data" :key="item.key" class="sc-select-filter__item">
-      <div class="sc-select-filter__item-title" :style="{'width':labelWidth+'px'}"><label>{{ item.title }}：</label>
+      <div :style="{'width':labelWidth+'px'}" class="sc-select-filter__item-title"><label>{{ item.title }}：</label>
       </div>
       <div class="sc-select-filter__item-options">
         <ul>
-          <li :class="{'active':selected[item.key]&&selected[item.key].includes(option.value)}"
-              v-for="option in item.options" :key="option.value" @click="select(option, item)">
+          <li v-for="option in item.options"
+              :key="option.value" :class="{'active':selected[item.key]&&selected[item.key].includes(option.value)}" @click="select(option, item)">
             <el-icon v-if="option.icon">
               <component :is="option.icon"/>
             </el-icon>

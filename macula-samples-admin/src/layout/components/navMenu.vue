@@ -17,7 +17,7 @@
 
 <template>
   <div v-if="navMenus.length<=0" style="padding:20px;">
-    <el-alert title="无子集菜单" center type="info" :closable="false"></el-alert>
+    <el-alert :closable="false" center title="无子集菜单" type="info"></el-alert>
   </div>
   <template v-for="navMenu in navMenus" v-bind:key="navMenu">
     <el-menu-item v-if="!hasChildren(navMenu)" :index="navMenu.path">
@@ -26,8 +26,8 @@
         <component :is="navMenu.meta.icon || 'el-icon-menu'"/>
       </el-icon>
       <template #title>
-        <span>{{navMenu.meta.title}}</span>
-        <span v-if="navMenu.meta.tag" class="menu-tag">{{navMenu.meta.tag}}</span>
+        <span>{{ navMenu.meta.title }}</span>
+        <span v-if="navMenu.meta.tag" class="menu-tag">{{ navMenu.meta.tag }}</span>
       </template>
     </el-menu-item>
     <el-sub-menu v-else :index="navMenu.path">
@@ -35,8 +35,8 @@
         <el-icon v-if="navMenu.meta&&navMenu.meta.icon">
           <component :is="navMenu.meta.icon || 'el-icon-menu'"/>
         </el-icon>
-        <span>{{navMenu.meta.title}}</span>
-        <span v-if="navMenu.meta.tag" class="menu-tag">{{navMenu.meta.tag}}</span>
+        <span>{{ navMenu.meta.title }}</span>
+        <span v-if="navMenu.meta.tag" class="menu-tag">{{ navMenu.meta.tag }}</span>
       </template>
       <NavMenu :navMenus="navMenu.children"></NavMenu>
     </el-sub-menu>

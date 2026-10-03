@@ -16,7 +16,7 @@
   -->
 
 <template>
-  <el-card shadow="hover" header="欢迎">
+  <el-card header="欢迎" shadow="hover">
     <div class="welcome">
       <div class="logo">
         <img src="/img/logo.png">
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="actions">
-        <el-button type="primary" icon="el-icon-check" size="large" @click="godoc">文档</el-button>
+        <el-button icon="el-icon-check" size="large" type="primary" @click="godoc">文档</el-button>
       </div>
     </div>
   </el-card>

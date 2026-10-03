@@ -18,14 +18,14 @@
 <template>
   <div class="adminui-topbar">
     <div class="left-panel">
-      <el-breadcrumb separator-icon="el-icon-arrow-right" class="hidden-sm-and-down">
+      <el-breadcrumb class="hidden-sm-and-down" separator-icon="el-icon-arrow-right">
         <transition-group name="breadcrumb">
           <template v-for="item in breadList" :key="item.title">
             <el-breadcrumb-item v-if="item.path!='/' &&  !item.meta.hiddenBreadcrumb" :to="toPath(item)">
-              <el-icon class="icon" v-if="item.meta.icon">
+              <el-icon v-if="item.meta.icon" class="icon">
                 <component :is="item.meta.icon"/>
               </el-icon>
-              {{item.meta.title}}
+              {{ item.meta.title }}
             </el-breadcrumb-item>
           </template>
         </transition-group>

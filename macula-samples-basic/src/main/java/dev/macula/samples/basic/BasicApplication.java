@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package dev.macula.samples.thirdparty;
+package dev.macula.samples.basic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,16 +23,16 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * {@code MaculaSamplesThirdPartyApplication} 第三方调用启动类
+ * {@code MaculaSamplesBasicApplication} 基础模块启动类
  *
  * @author rain
- * @since 2023/8/28 22:39
+ * @since 2023/8/28 23:27
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-public class MaculaSamplesThirdPartyApplication {
+public class BasicApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MaculaSamplesThirdPartyApplication.class, args);
+        SpringApplication.run(BasicApplication.class, args);
     }
 }

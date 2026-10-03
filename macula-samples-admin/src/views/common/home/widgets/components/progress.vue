@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <el-card shadow="hover" header="进度环">
+  <el-card header="进度环" shadow="hover">
     <div class="progress">
-      <el-progress type="dashboard" :percentage="85.5" :width="160">
+      <el-progress :percentage="85.5" :width="160" type="dashboard">
         <template #default="{ percentage }">
           <div class="percentage-value">{{ percentage }}%</div>
           <div class="percentage-label">当前进度</div>

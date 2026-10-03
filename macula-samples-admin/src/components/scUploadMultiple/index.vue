@@ -17,23 +17,23 @@
 
 <template>
   <div class="sc-upload-multiple">
-    <el-upload ref="uploader" list-type="picture-card"
+    <el-upload ref="uploader" v-model:file-list="defaultFileList"
                :auto-upload="autoUpload"
                :disabled="disabled"
-               :action="action"
-               :name="name"
-               :data="data"
-               :http-request="request"
-               v-model:file-list="defaultFileList"
-               :show-file-list="showFileList"
                :accept="accept"
-               :multiple="multiple"
-               :limit="limit"
+               :action="action"
                :before-upload="before"
+               :http-request="request"
+               :data="data"
+               :limit="limit"
+               :name="name"
+               :multiple="multiple"
+               :on-exceed="handleExceed"
                :on-success="success"
+               :show-file-list="showFileList"
                :on-error="error"
                :on-preview="handlePreview"
-               :on-exceed="handleExceed">
+               list-type="picture-card">
       <slot>
         <el-icon>
           <el-icon-plus/>
@@ -44,9 +44,9 @@
       </template>
       <template #file="{ file }">
         <div class="sc-upload-list-item">
-          <el-image class="el-upload-list__item-thumbnail" :src="file.url" fit="cover" :preview-src-list="preview"
-                    :initial-index="preview.findIndex(n=>n==file.url)" hide-on-click-modal append-to-body
-                    :z-index="9999">
+          <el-image :initial-index="preview.findIndex(n=>n==file.url)" :preview-src-list="preview" :src="file.url" :z-index="9999"
+                    append-to-body class="el-upload-list__item-thumbnail" fit="cover"
+                    hide-on-click-modal>
             <template #placeholder>
               <div class="sc-upload-multiple-image-slot">
                 Loading...
@@ -57,7 +57,7 @@
             <span class="del" @click="handleRemove(file)"><el-icon><el-icon-delete/></el-icon></span>
           </div>
           <div v-if="file.status=='ready' || file.status=='uploading'" class="sc-upload__item-progress">
-            <el-progress :percentage="file.percentage" :text-inside="true" :stroke-width="16"/>
+            <el-progress :percentage="file.percentage" :stroke-width="16" :text-inside="true"/>
           </div>
         </div>
       </template>

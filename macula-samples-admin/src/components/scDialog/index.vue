@@ -25,8 +25,8 @@
 -->
 
 <template>
-  <div class="sc-dialog" ref="scDialog">
-    <el-dialog ref="dialog" v-model="dialogVisible" :fullscreen="isFullscreen" v-bind="$attrs" :show-close="false">
+  <div ref="scDialog" class="sc-dialog">
+    <el-dialog ref="dialog" v-model="dialogVisible" :fullscreen="isFullscreen" :show-close="false" v-bind="$attrs">
       <template #header>
         <slot name="header">
           <span class="el-dialog__title">{{ title }}</span>

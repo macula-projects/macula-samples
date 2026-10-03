@@ -15,24 +15,20 @@
  * limitations under the License.
  */
 
-package dev.macula.samples.basic;
+package dev.macula.samples.openapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
- * {@code MaculaSamplesBasicApplication} 基础模块启动类
+ * {@code OpenApiApplication} OPENAPI启动类
  *
  * @author rain
- * @since 2023/8/28 23:27
+ * @since 2023/8/28 18:59
  */
 @SpringBootApplication
-@EnableDiscoveryClient
-@EnableFeignClients
-public class MaculaSamplesBasicApplication {
+public class OpenApiApplication {
     public static void main(String[] args) {
-        SpringApplication.run(MaculaSamplesBasicApplication.class, args);
+        SpringApplication.run(OpenApiApplication.class, args);
     }
 }

@@ -25,7 +25,7 @@
 -->
 
 <template>
-  <div class="sc-video" ref="scVideo"></div>
+  <div ref="scVideo" class="sc-video"></div>
 </template>
 
 <script>

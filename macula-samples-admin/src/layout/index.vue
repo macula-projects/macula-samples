@@ -45,8 +45,8 @@
         </div>
         <div class="adminui-side-scroll">
           <el-scrollbar>
-            <el-menu :default-active="active" router :collapse="menuIsCollapse"
-                     :unique-opened="$CONFIG.MENU_UNIQUE_OPENED">
+            <el-menu :collapse="menuIsCollapse" :default-active="active" :unique-opened="$CONFIG.MENU_UNIQUE_OPENED"
+                     router>
               <NavMenu :navMenus="nextMenu"></NavMenu>
             </el-menu>
           </el-scrollbar>
@@ -62,10 +62,10 @@
       <div class="aminui-body el-container">
         <Topbar v-if="!ismobile"></Topbar>
         <Tags v-if="!ismobile && layoutTags"></Tags>
-        <div class="adminui-main" id="adminui-main">
+        <div id="adminui-main" class="adminui-main">
           <router-view v-slot="{ Component }">
             <keep-alive :include="keepLiveRoute">
-              <component :is="Component" :key="$route.fullPath" v-if="routeShow"/>
+              <component :is="Component" v-if="routeShow" :key="$route.fullPath"/>
             </keep-alive>
           </router-view>
           <iframe-view></iframe-view>
@@ -91,8 +91,8 @@
       <div v-if="!ismobile" :class="menuIsCollapse?'aminui-side isCollapse':'aminui-side'">
         <div class="adminui-side-scroll">
           <el-scrollbar>
-            <el-menu :default-active="active" router :collapse="menuIsCollapse"
-                     :unique-opened="$CONFIG.MENU_UNIQUE_OPENED">
+            <el-menu :collapse="menuIsCollapse" :default-active="active" :unique-opened="$CONFIG.MENU_UNIQUE_OPENED"
+                     router>
               <NavMenu :navMenus="menu"></NavMenu>
             </el-menu>
           </el-scrollbar>
@@ -108,10 +108,10 @@
       <div class="aminui-body el-container">
         <Topbar v-if="!ismobile"></Topbar>
         <Tags v-if="!ismobile && layoutTags"></Tags>
-        <div class="adminui-main" id="adminui-main">
+        <div id="adminui-main" class="adminui-main">
           <router-view v-slot="{ Component }">
             <keep-alive :include="keepLiveRoute">
-              <component :is="Component" :key="$route.fullPath" v-if="routeShow"/>
+              <component :is="Component" v-if="routeShow" :key="$route.fullPath"/>
             </keep-alive>
           </router-view>
           <iframe-view></iframe-view>
@@ -131,8 +131,8 @@
       </div>
       <div class="adminui-header-right">
         <div v-if="!ismobile" class="adminui-header-menu">
-          <el-menu mode="horizontal" :default-active="active" router background-color="#222b45" text-color="#fff"
-                   active-text-color="var(--el-color-primary)">
+          <el-menu :default-active="active" active-text-color="var(--el-color-primary)" background-color="#222b45" mode="horizontal" router
+                   text-color="#fff">
             <NavMenu :navMenus="menu"></NavMenu>
           </el-menu>
         </div>
@@ -143,10 +143,10 @@
     <section class="aminui-wrapper">
       <div class="aminui-body el-container">
         <Tags v-if="!ismobile && layoutTags"></Tags>
-        <div class="adminui-main" id="adminui-main">
+        <div id="adminui-main" class="adminui-main">
           <router-view v-slot="{ Component }">
             <keep-alive :include="keepLiveRoute">
-              <component :is="Component" :key="$route.fullPath" v-if="routeShow"/>
+              <component :is="Component" v-if="routeShow" :key="$route.fullPath"/>
             </keep-alive>
           </router-view>
           <iframe-view></iframe-view>
@@ -161,7 +161,7 @@
       <div v-if="!ismobile" class="aminui-side-split">
         <div class="aminui-side-split-top">
           <router-link :to="$CONFIG.DASHBOARD_URL">
-            <img class="logo" :title="$CONFIG.APP_NAME" src="/img/logo-r.png">
+            <img :title="$CONFIG.APP_NAME" class="logo" src="/img/logo-r.png">
           </router-link>
         </div>
         <div class="adminui-side-split-scroll">
@@ -185,8 +185,8 @@
         </div>
         <div class="adminui-side-scroll">
           <el-scrollbar>
-            <el-menu :default-active="active" router :collapse="menuIsCollapse"
-                     :unique-opened="$CONFIG.MENU_UNIQUE_OPENED">
+            <el-menu :collapse="menuIsCollapse" :default-active="active" :unique-opened="$CONFIG.MENU_UNIQUE_OPENED"
+                     router>
               <NavMenu :navMenus="nextMenu"></NavMenu>
             </el-menu>
           </el-scrollbar>
@@ -204,10 +204,10 @@
           <userbar></userbar>
         </Topbar>
         <Tags v-if="!ismobile && layoutTags"></Tags>
-        <div class="adminui-main" id="adminui-main">
+        <div id="adminui-main" class="adminui-main">
           <router-view v-slot="{ Component }">
             <keep-alive :include="keepLiveRoute">
-              <component :is="Component" :key="$route.fullPath" v-if="routeShow"/>
+              <component :is="Component" v-if="routeShow" :key="$route.fullPath"/>
             </keep-alive>
           </router-view>
           <iframe-view></iframe-view>
@@ -228,7 +228,7 @@
     </el-icon>
   </div>
 
-  <el-drawer title="布局实时演示" v-model="settingDialog" :size="400" append-to-body destroy-on-close>
+  <el-drawer v-model="settingDialog" :size="400" append-to-body destroy-on-close title="布局实时演示">
     <setting></setting>
   </el-drawer>
 </template>

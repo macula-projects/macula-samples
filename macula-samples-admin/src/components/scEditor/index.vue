@@ -17,7 +17,7 @@
 
 <template>
   <div class="sceditor">
-    <Editor v-model="contentValue" :init="init" :disabled="disabled" :placeholder="placeholder" @onClick="onClick"/>
+    <Editor v-model="contentValue" :disabled="disabled" :init="init" :placeholder="placeholder" @onClick="onClick"/>
   </div>
 </template>
 

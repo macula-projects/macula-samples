@@ -16,9 +16,9 @@
   -->
 
 <template>
-  <el-form ref="form" label-width="120px" label-position="left" style="padding:0 20px;">
-    <el-alert title="以下配置可实时预览，开发者可在 config/index.js 中配置默认值，非常不建议在生产环境下开放布局设置"
-              type="error" :closable="false"></el-alert>
+  <el-form ref="form" label-position="left" label-width="120px" style="padding:0 20px;">
+    <el-alert :closable="false"
+              title="以下配置可实时预览，开发者可在 config/index.js 中配置默认值，非常不建议在生产环境下开放布局设置" type="error"></el-alert>
     <el-divider></el-divider>
     <el-form-item :label="$t('user.nightmode')">
       <el-switch v-model="dark"></el-switch>

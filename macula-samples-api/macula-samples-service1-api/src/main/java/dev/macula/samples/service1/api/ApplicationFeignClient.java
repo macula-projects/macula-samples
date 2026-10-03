@@ -17,19 +17,19 @@
 
 package dev.macula.samples.service1.api;
 
-import dev.macula.boot.result.PageVO;
-import dev.macula.samples.service1.api.fallback.AbstracApplicationFeignFallbackFactory;
 import dev.macula.samples.service1.form.ApplicationForm;
+import dev.macula.samples.service1.api.fallback.AbstracApplicationFeignFallbackFactory;
 import dev.macula.samples.service1.query.ApplicationPageQuery;
 import dev.macula.samples.service1.vo.app.ApplicationVO;
+import dev.macula.boot.result.PageVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 /**
- * {@code ApplicationFeignClient} 应用远程接口
+ * {@code ApplicationFeignClient} is 应用管理接口
  *
  * @author rain
  * @since 2023/9/11 17:38

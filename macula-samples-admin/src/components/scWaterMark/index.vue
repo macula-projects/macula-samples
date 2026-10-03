@@ -25,7 +25,7 @@
 -->
 
 <template>
-  <div class="sc-water-mark" ref="scWaterMark">
+  <div ref="scWaterMark" class="sc-water-mark">
     <slot></slot>
   </div>
 </template>

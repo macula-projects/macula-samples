@@ -8,18 +8,18 @@
 -->
 
 <template>
-  <div class="scTable" :style="{'height':_height}" ref="scTableMain" v-loading="loading">
-    <div class="scTable-table" :style="{'height':_table_height}">
-      <el-table v-bind="$attrs" :data="tableData" :row-key="getRowKey" :key="toggleIndex" ref="scTable"
-                :height="height=='auto'?null:'100%'" :size="config.size" :border="config.border" :stripe="config.stripe"
-                :summary-method="remoteSummary?remoteSummaryMethod:summaryMethod" @sort-change="sortChange"
+  <div ref="scTableMain" v-loading="loading" :style="{'height':_height}" class="scTable">
+    <div :style="{'height':_table_height}" class="scTable-table">
+      <el-table :key="toggleIndex" ref="scTable" :border="config.border" :data="tableData" :height="height=='auto'?null:'100%'"
+                :row-key="getRowKey" :size="config.size" :stripe="config.stripe" :summary-method="remoteSummary?remoteSummaryMethod:summaryMethod"
+                v-bind="$attrs" @sort-change="sortChange"
                 @filter-change="filterChange">
         <slot></slot>
         <template v-for="(item, index) in userColumn" :key="index">
-          <el-table-column v-if="!item.hide" :column-key="item.prop" :label="item.label" :prop="item.prop"
-                           :width="item.width" :sortable="item.sortable" :fixed="item.fixed" :filters="item.filters"
-                           :filter-method="remoteFilter||!item.filters?null:filterHandler"
-                           :show-overflow-tooltip="item.showOverflowTooltip">
+          <el-table-column v-if="!item.hide" :column-key="item.prop" :filter-method="remoteFilter||!item.filters?null:filterHandler" :filters="item.filters"
+                           :fixed="item.fixed" :label="item.label" :prop="item.prop" :show-overflow-tooltip="item.showOverflowTooltip"
+                           :sortable="item.sortable"
+                           :width="item.width">
             <template #default="scope">
               <slot :name="item.prop" v-bind="scope">
                 {{ scope.row[item.prop] }}
@@ -33,28 +33,28 @@
         </template>
       </el-table>
     </div>
-    <div class="scTable-page" v-if="!hidePagination || !hideDo">
+    <div v-if="!hidePagination || !hideDo" class="scTable-page">
       <div class="scTable-pagination">
-        <el-pagination v-if="!hidePagination" background :small="true" :layout="paginationLayout" :total="total"
-                       :page-size="scPageSize" :page-sizes="pageSizes" v-model:currentPage="currentPage"
+        <el-pagination v-if="!hidePagination" v-model:currentPage="currentPage" :layout="paginationLayout" :page-size="scPageSize" :page-sizes="pageSizes"
+                       :small="true" :total="total" background
                        @current-change="paginationChange" @update:page-size="pageSizeChange"></el-pagination>
       </div>
-      <div class="scTable-do" v-if="!hideDo">
-        <el-button v-if="!hideRefresh" @click="refresh" icon="el-icon-refresh" circle
-                   style="margin-left:15px"></el-button>
-        <el-popover v-if="column" placement="top" title="列设置" :width="500" trigger="click" :hide-after="0"
+      <div v-if="!hideDo" class="scTable-do">
+        <el-button v-if="!hideRefresh" circle icon="el-icon-refresh" style="margin-left:15px"
+                   @click="refresh"></el-button>
+        <el-popover v-if="column" :hide-after="0" :width="500" placement="top" title="列设置" trigger="click"
                     @show="customColumnShow=true" @after-leave="customColumnShow=false">
           <template #reference>
-            <el-button icon="el-icon-set-up" circle style="margin-left:15px"></el-button>
+            <el-button circle icon="el-icon-set-up" style="margin-left:15px"></el-button>
           </template>
-          <columnSetting v-if="customColumnShow" ref="columnSetting" @userChange="columnSettingChange"
-                         @save="columnSettingSave" @back="columnSettingBack" :column="userColumn"></columnSetting>
+          <columnSetting v-if="customColumnShow" ref="columnSetting" :column="userColumn"
+                         @back="columnSettingBack" @save="columnSettingSave" @userChange="columnSettingChange"></columnSetting>
         </el-popover>
-        <el-popover v-if="!hideSetting" placement="top" title="表格设置" :width="400" trigger="click" :hide-after="0">
+        <el-popover v-if="!hideSetting" :hide-after="0" :width="400" placement="top" title="表格设置" trigger="click">
           <template #reference>
-            <el-button icon="el-icon-setting" circle style="margin-left:15px"></el-button>
+            <el-button circle icon="el-icon-setting" style="margin-left:15px"></el-button>
           </template>
-          <el-form label-width="80px" label-position="left">
+          <el-form label-position="left" label-width="80px">
             <el-form-item label="表格尺寸">
               <el-radio-group v-model="config.size" size="small" @change="configSizeChange">
                 <el-radio-button label="large">大</el-radio-button>
